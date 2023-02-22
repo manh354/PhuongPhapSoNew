@@ -1,0 +1,83 @@
+variables = sp.symbols("x y")
+deriv_equations = ["-e**cos(t)*sin(t)","e**sin(t)*cos(t)+1/2"]
+groundtruth_equations=["e**cos(t)","e**sin(t)+(t-2)/2"]
+vars_start = [np.e,0]
+t_start = 0
+t_end = 5
+
+####################################
+##### Simple periodic function #####
+####################################
+
+variables = sp.symbols("x y")
+deriv_equations = ["sin(t)","cos(t)"]
+groundtruth_equations=["-cos(t)","sin(t)"]
+vars_start = [-1,0]
+t_start = 0
+t_end = 10
+
+###########################################
+##### Comparision of pretty functions #####
+###########################################
+
+variables = sp.symbols("x y")
+deriv_equations = ["sin(t)","e**(t**2*sin(5*t))*(2*t*sin(5*t)+5*t**2*cos(5*t))"]
+groundtruth_equations = ["-cos(t)","e**(t**2*sin(5*t))"]
+vars_start = [-1,1]
+t_start = 0
+t_end = 5
+
+###########################################
+##### Comparision of pretty functions #####
+###########################################
+
+variables = sp.symbols("x y")
+deriv_equations =["e**(log(t/10+1)*sin(t))*(sin(t)/(10*(t/10+1))+log(t/10+1)*cos(t))","e**(log(t/10+1)*cos(t))*(cos(t)/(10*(t/10+1))-log(t/10+1)*sin(t))"]
+groundtruth_equations = ["e**(log(0.1*t+1)*sin(t))","e**(log(0.1*t+1)*cos(t))"]
+vars_start = [1,1]
+t_start = 0
+t_end = 5
+
+#################################
+##### Predator - Prey model #####
+#################################
+
+variables = sp.symbols("x y")
+deriv_equations = ["x*(0.1-0.02*y)","y*(0.02*x - 0.4)"]
+groundtruth_equations = ["None","None"]
+vars_start = [50,1]
+t_start = 0
+t_end = 5
+
+#################################
+##### Predator - Prey model #####
+########                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               #########################
+
+variables = sp.symbols("x y z")
+deriv_equations = ["x*(0.1-0.02*y)","y*(0.02*x - 0.01*z - 0.4)","0.01*x - 0.2"]
+groundtruth_equations = ["None","None","None"]
+vars_start = [50,1,1]
+t_start = 0
+t_end = 5
+
+##########################################
+##### Comparision of first order ODE #####
+##########################################
+
+variables = sp.symbols("x y")
+deriv_equations = ["cos(2*t)**2*x","sin(t)**2*y"]
+groundtruth_equations=["e**((sin(4*t)+4*t)/8)","e**(t/2-sin(2*t)/4)"]
+vars_start = [1,1]
+t_start = 0
+t_end = 5
+
+############################
+##### Lorenz attractor #####
+############################
+
+variables = sp.symbols("x y z")
+deriv_equations = ["10*(y-x)","x*(28-z)-y","x*y-8/3*z"]
+groundtruth_equations=["None","None"]
+vars_start = [0.05,1.0,1.05]
+t_start = 0
+t_end = 50

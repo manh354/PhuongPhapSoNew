@@ -1,0 +1,19 @@
+#####################
+##### Homeworks #####
+#####################
+
+adjustable_parameters = sp.symbols("a b c")
+independent_variable = sp.Symbol("x")
+test_function = "5*cos(x) + 0.5*x + 2"
+fitting_function = "a*cos(x) + b*x + c"
+param_start = [1,0,0]
+
+############################################################################
+##### Function similar to homeworks but broke under most circumstances #####
+############################################################################
+
+adjustable_parameters = sp.symbols("a b c d")
+independent_variable = sp.Symbol("x")
+test_function = "5*cos(4*x) + 0.05*x*log(x) + 2"
+fitting_function = "a*cos(4*x) + b*x*log(c*x) + d"
+param_start = [5,0.05,1,2]
