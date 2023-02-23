@@ -124,4 +124,5 @@ print(list(zip(dataX,dataY)))
 
 dataX = [1., 1.05, 1.1, 1.15, 1.2, 1.25]
 dataY = [1.00000, 0.97350, 0.95135, 0.93304, 0.91817, 0.90640]
-mainNewtonBackwardReverse(dataX,dataY,0.91106,0.0001)
+solanlap, hoituhaykhong, t1, x = mainNewtonBackwardReverse(dataX,dataY,0.91106,0.0001)
+print(x)

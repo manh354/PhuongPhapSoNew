@@ -8,7 +8,6 @@ a = 0
 b = 1
 
 
-
 # kĩ thuật lưới phủ tìm tích phân hàm khó tính M4
 def simpsonGrid(equation ,variable, start, end, num_step,eps):
     # khởi tạo chung

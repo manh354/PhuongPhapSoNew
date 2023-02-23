@@ -1,15 +1,15 @@
-from DifferentialEquation.eulerForward import mainEulerForward
-from DifferentialEquation.eulerBackward import mainEulerBackward
-from DifferentialEquation.trapezoid import mainTrapezoid
-from DifferentialEquation.rungeKutta import mainRungeKutta4_Classic, mainRungaKutta3_Heun, mainRungaKutta3_Kutta
-from DifferentialEquation.adamsBashfort import mainAdamsBashfort
-from DifferentialEquation.adamsMoulton import mainAdamsMoulton
-from DifferentialEquation.adamsPredictorCorrector import mainAdamsPredictorCorrector
+from differentialEquation.eulerForward import mainEulerForward
+from differentialEquation.eulerBackward import mainEulerBackward
+from differentialEquation.trapezoid import mainTrapezoid
+from differentialEquation.rungeKutta import mainRungeKutta4_Classic, mainRungaKutta3_Heun, mainRungaKutta3_Kutta
+from differentialEquation.adamsBashfort import mainAdamsBashfort
+from differentialEquation.adamsMoulton import mainAdamsMoulton
+from differentialEquation.adamsPredictorCorrector import mainAdamsPredictorCorrector
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-t = sp.symbols('t')
+t = sp.symbols('t') 
 
 variables = sp.symbols("x y")
 deriv_equations = ["sin(t)","cos(t)"]
