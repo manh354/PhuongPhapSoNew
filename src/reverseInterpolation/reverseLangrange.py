@@ -1,7 +1,7 @@
 # da thuc Langrange co cong thuc la : Tong sigma (0,n) yi/Di  * (w_n+1(x))/(x-xi)
 
 import numpy as np
-from tableAndPolynomial import *
+from .tableAndPolynomial import *
 
 def CalculateDiValue(roots: list, position):
     result = 1
@@ -36,3 +36,5 @@ def mainLangrange(dataX, dataY):
     poly = ConvertLangrangeTableToPoly(polynomials)
     return w, polynomials, poly
 
+def mainReverseLangrange(dataX, dataY):
+    return mainLangrange(dataY,dataX)

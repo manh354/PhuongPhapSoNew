@@ -1,10 +1,8 @@
-import sys
-from dataSlicingNewton import sliceInputNewtonForward
-from dataOutputNewton import outputAny, outputEqui
-sys.path.append('../PhuongPhapSo')
+from .dataSlicingNewton import sliceInputNewtonForward
+from .dataOutputNewton import outputAny, outputEqui
 
-from tableAndPolynomial import *
-from valuesConvert import *
+from .tableAndPolynomial import *
+from .valuesConvert import *
 
 def mainAny(dataX, dataY):
     """
