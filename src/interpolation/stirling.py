@@ -1,9 +1,6 @@
-import sys
-sys.path.append('../PhuongPhapSo')
-from tableAndPolynomial import ConvertPolyTableToPoly, CreateChangedPolynomialDegreeByXamount, CreateDifferenceTable, CreateFactorialTable, CreateRootPolySqr, MulPolyWithCoef, MulTwoPoly
-from dataSlicingCenter import sliceInputFromCenterStirling
-from dataOutputCenter import output
-from tableAndPolynomial import *
+from .dataSlicingCenter import sliceInputFromCenterStirling
+from .dataOutputCenter import output
+from .tableAndPolynomial import *
 import matplotlib.pyplot as plt
 import numpy as np
 

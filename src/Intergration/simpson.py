@@ -1,4 +1,3 @@
-from findStep import main as findStep
 import sympy as sp
 import numpy as np
 
@@ -8,8 +7,8 @@ a = 0
 b = 1
 
 
-# kĩ thuật lưới phủ tìm tích phân hàm khó tính M4
-def simpsonGrid(equation ,variable, start, end, num_step,eps):
+# kĩ thuật lưới phủ simpson bậc 2 tìm tích phân hàm khó tính M4
+def simpsonQuadraticGrid(equation ,variable, start, end, num_step,eps):
     # khởi tạo chung
     all_grid_result = []
     equation = sp.lambdify(variable,equation,'numpy')
@@ -46,5 +45,5 @@ def simpsonGrid(equation ,variable, start, end, num_step,eps):
     
     return all_grid_result[-1]
 
-result, num_step = simpsonGrid(equation, variable,a,b, 10, 5e-8)
-print("Kết quả cuối cùng thu được: {0} \tsau số bước: {1}".format(result,num_step))
+# result, num_step = simpsonQuadraticGrid(equation, variable,a,b, 10, 5e-8)
+# print("Kết quả cuối cùng thu được: {0} \tsau số bước: {1}".format(result,num_step))

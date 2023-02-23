@@ -1,4 +1,4 @@
-from tableAndPolynomial import *
+from .tableAndPolynomial import *
 import math
 import numpy as np
 

@@ -1,11 +1,9 @@
-import sys
-sys.path.append('../PhuongPhapSo')
-from dataSlicingCenter import sliceInputFromCenterGauss1, sliceInputFromCenterGauss2
-from dataOutputCenter import output
+from .dataSlicingCenter import sliceInputFromCenterGauss1, sliceInputFromCenterGauss2
+from .dataOutputCenter import output
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tableAndPolynomial import *
+from .tableAndPolynomial import *
 
 # cách chọn chỉ số của gauss1 trên bảng sai phân
 #===============================

@@ -1,4 +1,5 @@
-from typing import List
+import numpy as np
+
 
 def findMonotonicSegments(dataX, dataY):
     resultX = []
@@ -37,9 +38,10 @@ def findAllSegmentContainPointY(monotonic_segments_list_x : list[list], monotoni
             allSegmentY.append( monotonic_segments_list_y[i])
     return allSegmentX,allSegmentY
 
-def findUsableSegmentFromData(dataX,dataY, point_y):
+
+def findSegmentContainsRoot(dataX,dataY, value):
     monotonic_segments_list_x, monotonic_segments_list_y = findMonotonicSegments(dataX, dataY)
-    usable_segments_x, usable_segments_y = findAllSegmentContainPointY(monotonic_segments_list_x, monotonic_segments_list_y, point_y)
+    usable_segments_x, usable_segments_y = findAllSegmentContainPointY(monotonic_segments_list_x, monotonic_segments_list_y, value)
     if(usable_segments_x == None or usable_segments_y == None):
         return None,None
     print("Có các khoảng đơn điệu sau:")
@@ -47,5 +49,5 @@ def findUsableSegmentFromData(dataX,dataY, point_y):
         print("Dãy {0}: X = {1} ; Y = {2}".format(i, usable_segments_x[i],usable_segments_y[i]))
     print("Chọn khoảng đơn điệu cần tìm: (ấn số 1,2...)")
     number = int(input())
-    return usable_segments_x[number],usable_segments_y[number]
-
+    
+    return usable_segments_x,usable_segments_y,usable_segments_x[number],usable_segments_y[number]

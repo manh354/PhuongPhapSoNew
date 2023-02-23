@@ -1,13 +1,11 @@
 # da thuc Langrange co cong thuc la : Tong sigma (0,n) yi/Di  * (w_n+1(x))/(x-xi)
 
-from dataSlicingLangrange import sliceInputFromLeftToRight
-from dataOutputLangrange import output
-import sys
-sys.path.append('../PhuongPhapSo')
+from .dataSlicingLangrange import sliceInputFromLeftToRight
+from .dataOutputLangrange import output
+from .tableAndPolynomial import *
 
 import matplotlib.pyplot as plt
 import numpy as np
-from tableAndPolynomial import *
 
 def CalculateDiValue(roots: list, position):
     result = 1
