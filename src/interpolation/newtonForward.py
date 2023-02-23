@@ -3,8 +3,8 @@ from dataSlicingNewton import sliceInputNewtonForward
 from dataOutputNewton import outputAny, outputEqui
 sys.path.append('../PhuongPhapSo')
 
-from Interpolation.tableAndPolynomial import *
-from Interpolation.valuesConvert import *
+from tableAndPolynomial import *
+from valuesConvert import *
 
 def mainAny(dataX, dataY):
     """

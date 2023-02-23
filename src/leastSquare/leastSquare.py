@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 #dataX=np.array([0.038,0.194,0.425,0.626,1.253,2.500,3.740])
 #dataY=np.array([0.050,0.127,0.094,0.2122,0.2729,0.2665,0.3317])
 
-adjustable_parameters = sp.symbols("a b c")
+adjustable_parameters = sp.symbols("a c")
 independent_variable = sp.Symbol("x")
-test_function = "5*cos(4*x) + 0.05*x + 2"
-fitting_function = "a*cos(4*x) + b*x + c"
-param_start = [5,0.05,1]
+test_function = "0"
+fitting_function = "a*x**2  + c"
+param_start = [1,1]
 
 
 test_function = sp.lambdify(independent_variable,test_function)
@@ -28,9 +28,10 @@ dataY = np.add(truth_dataY, offsetY)
 
 print(list(dataX))
 print(list(dataY))
-#dataX = np.linspace(1,2,21)
+dataX = np.linspace(1,2,21)
 #print(dataX)
-##dataY = [1.0,0.97350,0.95135,0.93304,0.91817,0.90640, 0.89747, 0.89115, 0.88726, 0.88565,0.88623, 0.88887, 0.89352, 0.90012, 0.90864, 0.91906, 0.93138, 0.94561, 0.96177, 0.97988, 1.00000]
+dataY = [1.0,0.97350,0.95135,0.93304,0.91817,0.90640, 0.89747, 0.89115, 0.88726, 0.88565,0.88623, 0.88887, 0.89352, 0.90012, 0.90864, 0.91906, 0.93138, 0.94561, 0.96177, 0.97988, 1.00000]
+dataY = np.multiply(100, dataY)
 #dataY = np.array(dataY)
 #z = list(zip(dataX,dataY))
 #print(z)

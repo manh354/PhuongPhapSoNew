@@ -1,7 +1,7 @@
 from differentialEquation.eulerForward import mainEulerForward
 from differentialEquation.eulerBackward import mainEulerBackward
 from differentialEquation.trapezoid import mainTrapezoid
-from differentialEquation.rungeKutta import mainRungeKutta4_Classic, mainRungaKutta3_Heun, mainRungaKutta3_Kutta
+from differentialEquation.rungeKutta import mainRungeKutta4_Classic, mainRungaKutta3_Heun, mainRungaKutta3_Kutta, mainRungeKutta2_Heun
 from differentialEquation.adamsBashfort import mainAdamsBashfort
 from differentialEquation.adamsMoulton import mainAdamsMoulton
 from differentialEquation.adamsPredictorCorrector import mainAdamsPredictorCorrector
@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 t = sp.symbols('t') 
 
 variables = sp.symbols("x y")
-deriv_equations = ["sin(t)","cos(t)"]
+deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)","-0.35*y+0.35*x**2*y/(1+15*x**2)"]
 groundtruth_equations=["-cos(t)","sin(t)"]
-vars_start = [-1,0]
+vars_start = [6,4]
 t_start = 0
 t_end = 10
 h = 0.1
-Test = True
+Test = False
 
 
 def main2D(func):
@@ -146,42 +146,48 @@ def solve():
         main3D(mainRungeKutta4_Classic)
         plt.show()
     if(typeOfGraph == '2d'):
-        print("Euler hiện: ")
-        print("=============================================================================")
-        main2D(mainEulerForward)
-        plt.show()
-        print("Euler ẩn: ")
-        print("=============================================================================")
-        main2D(mainEulerBackward)
-        plt.show()
-        print("Thang ẩn: ")
-        print("=============================================================================")
-        main2D(mainTrapezoid)
-        plt.show()
-        print("RK3 Heun: ")
-        print("=============================================================================")
-        main2D(mainRungaKutta3_Heun)
-        plt.show()
-        print("RK3 Kutta: ")
-        print("=============================================================================")
-        main2D(mainRungaKutta3_Kutta)
-        plt.show()
+        #print("Euler hiện: ")
+        #print("=============================================================================")
+        #main2D(mainEulerForward)
+        #plt.show()
+        #print("Euler ẩn: ")
+        #print("=============================================================================")
+        #main2D(mainEulerBackward)
+        #plt.show()
+        #print("Thang ẩn: ")
+        #print("=============================================================================")
+        #main2D(mainTrapezoid)
+        #plt.show()
+        #print("RK3 Heun: ")
+        #print("=============================================================================")
+        #main2D(mainRungaKutta3_Heun)
+        #plt.show()
+        #print("RK3 Kutta: ")
+        #print("=============================================================================")
+        #main2D(mainRungaKutta3_Kutta)
+        #plt.show()
         print("RK4 Cổ điển: ")
         print("=============================================================================")
         main2D(mainRungeKutta4_Classic)
-        plt.show()
-        print("AB 4: ")
+        
+        print("RK 2 heun: ")        
         print("=============================================================================")
-        main2D(mainAdamsBashfort)
+        main2D(mainRungeKutta2_Heun)
         plt.show()
-        print("AM 4: ")
-        print("=============================================================================")
-        main2D(mainAdamsMoulton)
-        plt.show()
-        print("AB-AM PC: ")
-        print("=============================================================================")
-        main2D(mainAdamsPredictorCorrector)
-        plt.show()
+        #print("AB 4: ")
+        #print("=============================================================================")
+        #main2D(mainAdamsBashfort)
+        #plt.show()
+        #print("AM 4: ")
+        #print("=============================================================================")
+        #main2D(mainAdamsMoulton)
+        #plt.show()
+        #print("AB-AM PC: ")
+        #print("=============================================================================")
+        #main2D(mainAdamsPredictorCorrector)
+        #plt.show()
+        dummy()
+
 
 def chooseFunc():
     if(len(variables) ==3):
@@ -193,3 +199,6 @@ if(Test):
     test()
 else:
     solve()
+
+def dummy():
+    return
