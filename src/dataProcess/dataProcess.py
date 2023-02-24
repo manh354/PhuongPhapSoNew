@@ -1,4 +1,5 @@
 import numpy as np
+import sympy as sp
 
 
 def findMonotonicSegments(dataX, dataY):
@@ -51,3 +52,6 @@ def findSegmentContainsRoot(dataX,dataY, value):
     number = int(input())
     
     return usable_segments_x,usable_segments_y,usable_segments_x[number],usable_segments_y[number]
+
+def getLamdifiedFunction(string, symbol_params, symbol_var):
+    return sp.lambdify((symbol_var,[*symbol_params]),string, 'numpy')

@@ -7,17 +7,18 @@ import matplotlib.pyplot as plt
 #dataX=np.array([0.038,0.194,0.425,0.626,1.253,2.500,3.740])
 #dataY=np.array([0.050,0.127,0.094,0.2122,0.2729,0.2665,0.3317])
 
-adjustable_parameters = sp.symbols("a c")
-independent_variable = sp.Symbol("x")
+#adjustable_parameters = sp.symbols("a c")
+#independent_variable = sp.Symbol("x")
 #test_function = "0"
-fitting_function = "a*x**2  + c"
-param_start = [1,1]
+#fitting_function = "a*x**2  + c"
+#param_start = [1,1]
 
 def wrapperLeastSquare(dataX, dataY, adjustable_parameters,independent_variable,fitting_function,param_start):
 
     partial_derivatives = [str(sp.diff(fitting_function, param)) for param in adjustable_parameters]
     print(partial_derivatives)
-    fitting_function = sp.lambdify([independent_variable,[*adjustable_parameters]],fitting_function, 'numpy')
+    if(isinstance(fitting_function, str)):
+        fitting_function = sp.lambdify([independent_variable,[*adjustable_parameters]],fitting_function, 'numpy')
     partial_derivatives = [sp.lambdify([independent_variable,[*adjustable_parameters]],p_d, 'numpy') for p_d in partial_derivatives]
 
     fitting_function_values = np.array(fitting_function(dataX,param_start))
@@ -46,8 +47,8 @@ def wrapperLeastSquare(dataX, dataY, adjustable_parameters,independent_variable,
         print(*["{0} = {1};".format(adjustable_parameters[i],x) for (i,x) in enumerate(param_iterate_after)])
     return i, param_iterate_after
 
-def drawLeastSquare(dataX,dataY, param_iterate_after):
-    model_dataX = np.linspace(dataX[0], dataX[-1], num = 1000)
+def drawLeastSquare(dataX,dataY,fitting_function ,param_iterate_after):
+    model_dataX = np.linspace(dataX[0], dataX[len(dataX)-1], num = 1000)
     fitted_dataY = [fitting_function(x,param_iterate_after) for x in model_dataX]
     new_dataY = [fitting_function(x,param_iterate_after) for x in dataX]
     mse = np.divide(np.sum(np.square(np.subtract(new_dataY,dataY))),len(dataY))
