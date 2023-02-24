@@ -53,5 +53,6 @@ def findSegmentContainsRoot(dataX,dataY, value):
     
     return usable_segments_x,usable_segments_y,usable_segments_x[number],usable_segments_y[number]
 
-def getLamdifiedFunction(string, symbol_params, symbol_var):
-    return sp.lambdify((symbol_var,[*symbol_params]),string, 'numpy')
+def findNewtonFixedPointSegments(dataX, dataY, value):
+    monotonic_segments_list_x, monotonic_segments_list_y = findMonotonicSegments(dataX,dataY)
+    sable_segments_x, usable_segments_y = findAllSegmentContainPointY(monotonic_segments_list_x, monotonic_segments_list_y, value)

@@ -27,7 +27,7 @@ def simpsonQuadraticGrid(equation ,variable, start, end, num_step,eps):
     compare_value1 = float(1000)
     compare_value2 = float(-1000)
 
-    while(abs(compare_value1 - compare_value2) * 1.0/3.0 >=eps):
+    while(abs(compare_value1 - compare_value2) * 1.0/15.0 >=eps):
         # khởi tạo grid 2
         num_step *= 2
         gridX = np.linspace(start, end, num_step +1)

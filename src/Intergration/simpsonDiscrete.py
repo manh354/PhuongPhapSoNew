@@ -30,5 +30,5 @@ def halvesGrid(dataY):
     return dataY2
 
 
-# error_limit = 1.0/3.0 * abs(integrated_result - integrated_result2)
+# error_limit = 1.0/15.0 * abs(integrated_result - integrated_result2)
 # print("Đánh giá sai số nhỏ hơn: ", error_limit)

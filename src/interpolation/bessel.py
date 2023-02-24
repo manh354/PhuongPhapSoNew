@@ -1,10 +1,8 @@
-import sys
-sys.path.append('../PhuongPhapSo')
-from Interpolation.Center.dataSlicingCenter import sliceInputFromCenterBessel
-from Interpolation.Center.dataOutputCenter import output
+from .dataSlicingCenter import sliceInputFromCenterBessel
+from .dataOutputCenter import output
 import matplotlib.pyplot as plt
 import numpy as np
-from Interpolation.tableAndPolynomial import *
+from .tableAndPolynomial import *
 
 # cách chọn chỉ số của Bessel trên bảng sai phân (chẵn số mốc)
 #=================================

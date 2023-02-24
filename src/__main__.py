@@ -54,9 +54,9 @@ dataX, dataY = readVertical()
 adjustable_parameters = sp.symbols("a c")
 independent_variable = sp.Symbol("x")
 fitting_function = str("a*x**2  + c")
+fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
 
 param_start = [1,1]
 
 i, param = lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable,fitting_function,param_start)
-fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
 drawLeastSquare(dataX,dataY,fitting_function,param)
