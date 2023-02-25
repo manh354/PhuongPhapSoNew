@@ -2,6 +2,7 @@
 
 import numpy as np
 from .tableAndPolynomial import *
+import matplotlib.pyplot as plt
 
 def CalculateDiValue(roots: list, position):
     result = 1
@@ -38,3 +39,25 @@ def mainLangrange(dataX, dataY):
 
 def mainReverseLangrange(dataX, dataY):
     return mainLangrange(dataY,dataX)
+
+def output(dataY, dataX,w,all_polynomials,final_polynomial, y, interpolate_polynomial_value_at_x):
+    print("Dữ liệu Y: ", dataY)
+    print("Dữ liệu X: ", dataX)
+    print("Đa thức W tích Langrange: ",w)
+    print("Đa thức nội suy ngược thu được:", final_polynomial)
+    print("Giá trị nội suy ngược tại y = {0} là: {1}".format(y, interpolate_polynomial_value_at_x))
+
+def drawGraph(poly,dataY, dataX):
+    max_y = max(dataY)
+    min_y = min(dataY)
+    plt.scatter(dataY,dataX)
+    generate_dataY = np.linspace(min_y,max_y,200)
+    generate_dataX = [CalcPolyReversedInput(poly,x) for x in generate_dataY]
+    plt.plot(generate_dataY,generate_dataX)
+    plt.show()
+
+def wrapperReverseLangrange(dataX, dataY, y):
+    w, all_polynomials, final_polynomial = mainLangrange(dataY,dataX)
+    interpolate_polynomial_value_at_y = CalcPolyReversedInput(final_polynomial,y)
+    output(dataY, dataX,w,all_polynomials,final_polynomial, y, interpolate_polynomial_value_at_y)
+    drawGraph(final_polynomial, dataY,dataX)

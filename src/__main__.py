@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from dataInput.dataInput import readVertical
-from dataProcess.dataProcess import findSegmentContainsRoot
+from dataProcess.dataProcess import findSegmentContainsRoot, findNewtonFixedPointSegments, findReverseLangrangeSegments
 from dataProcess.dataAdvanceProcess import getLamdifiedFunction
 from intergration.simpson import simpsonQuadraticGrid
 # result, num_step = simpsonQuadraticGrid(equation, variable,a,b, 10, 5e-8)
@@ -32,7 +32,7 @@ from leastSquare.leastSquare import drawLeastSquare
 # fitting_function = "a*x**2  + c"
 # param_start = [1,1]
 from reverseInterpolation.newtonFixedPointIteration import mainNewtonBackwardReverse, mainNewtonForwardReverse
-from reverseInterpolation.reverseLangrange import mainReverseLangrange
+from reverseInterpolation.reverseLangrange import wrapperReverseLangrange
 from differentialEquation.eulerForward import mainEulerForward
 from differentialEquation.eulerBackward import mainEulerBackward
 from differentialEquation.trapezoid import mainTrapezoid
@@ -51,8 +51,17 @@ from differentialEquation.adamsMoulton import mainAdamsMoulton
 # Test = False
 
 dataX, dataY = readVertical()
-x = sp.Symbol("x")
-simpsonQuadraticGrid()
+all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7)
+for segment_x, segment_y in all_segments:
+    wrapperReverseLangrange(segment_x,segment_y,0.91106)
+
+#forward, backward = findNewtonFixedPointSegments(dataX,dataY,0.91106)
+#result = []
+#for X,Y in forward:
+#    result.append(mainNewtonForwardReverse(X, Y, 0.91106, 0.00001))
+#for i,(solanlap, hoituhaykhong, t,x) in enumerate(result):
+#    print("Đoạn số {0}, số lần lặp: {1}, hội tụ: {2}, t = {3}, x = {4}".format(i,solanlap,hoituhaykhong,t,x))
+#wrapperGauss1(dataX,dataY,1.43)
 
 #x,y,a,b = findSegmentContainsRoot(dataX, dataY, 0.90912)
 #

@@ -1,9 +1,9 @@
-#############################################################################
-################## Chào mừng bạn đến với hướng dẫn sử dụng ##################
-#############################################################################
-#                                                                           #
-#  Trong hướng dẫn này, mình sẽ chỉ cách để ghép các module code với nhau.  #
------------------------------------------------------------------------------
+#################################################################################
+################## Chào mừng bạn đến với hướng dẫn sử dụng ######################
+#################################################################################
+#                                                                           #####
+#  Trong hướng dẫn này, mình sẽ chỉ cách để ghép các module code với nhau.  #####
+---------------------------------------------------------------------------------
 I. Tổng quan
     - Để thực hiện tốt nhất, chạy code từ file __main__.py . File này đã import
     tất cả các module trong chương trình.
@@ -19,11 +19,93 @@ II. Hướng dẫn cụ thể
     │ xuất ra file data/discreteDataVertical.csv                                 │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
         - Trong hàm __main__.py, gọi hàm readVertical():
+        ╔═══════════════════════════════════╗
             dataX, dataY = readVertical()
+        ╚═══════════════════════════════════╝
         - Hàm này sẽ tự động trả về dữ liệu từ file .csv
     ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
     │ Chỉnh sửa path trong file "dataInput.py".                                  │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
     2. Sử dụng Nội suy
         - Sử dụng dataX, dataY.
-        -
+        - Các hàm wrapper sau đây tương ứng với các hàm nội suy tương ứng:
+            - "wrapperGauss1" : Gauss 1
+            - "wrapperGauss2" : Gauss 2
+            - "wrapperStirling" : Stirling
+            - "wrapperBesselNorm" : Bessel đổi biến t
+            - "wrapperBesselSkewed" : Bessel đổi biến u
+        - Các hàm wrapper không trả về kết quả.
+        - INPUT: của hàm wrapper : dataX, dataY, giá trị cần nội suy
+            - Wrapper yêu cầu nhập dữ liệu mốc trung tâm/ trái / phải tuỳ thuật 
+            toán.
+            - Wrapper yêu cầu nhập số mốc kết nạp về hai bên / trái / phải
+        - OUTPUT: Dữ liệu các hàm wrapper in ra lần lượt là:
+            - Bảng sai phân
+            - Hệ số đa thức đổi biến (a0 -> aN)
+            - Giá trị nội suy, giá trị đổi biến và kết quả nội suy thu được
+        - CODE: VD sử dụng gauss1:
+        ╔═══════════════════════════════════╗
+            dataX, dataY = readVertical()     
+            wrapperGauss1(dataX,dataY,1.43)   
+        ╚═══════════════════════════════════╝
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ Chỉnh sửa wrapper trong thư mục "interpolation/", các hàm wrapper tương    │
+    │ ứng với các file. Tuỳ chỉnh wrapper để xuất dữ liệu mong muốn.             │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+    3. Sử dụng nội suy ngược
+        - Sử dụng dataX, dataY
+        a. Phương pháp lặp Newton
+            - Sử dụng hàm "findNewtonFixedPointSegments" để tìm danh sách các đoạn 
+            dữ liệu hợp lý mà sử dụng được phương pháp lặp newton tiến và lùi.
+            - INPUT: dataX, dataY, điểm cần nội suy ngược.
+            - OUTPUT : Các đoạn dữ liệu sử dụng newton tiến, các đoạn dữ liệu sử 
+            dụng newton lùi.
+            - CODE : VD chạy thuật toán 
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            forward, backward = findNewtonFixedPointSegments(dataX,dataY,0.91106) 
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+            - Sử dụng "mainNewtonBackwardReverse" cho từng đoạn trong biến forward
+            ở trên để thực hiện thuật toán lặp newton tiến.
+            - Sử dụng "mainNewtonForwardReverse" cho từng đoạn trong biến backward
+            ở trên để thực hiện thuật toán lặp newton tiến.
+            - INPUT: dataX, dataY, giá trị cần nội suy ngược, độ chính xác cần đạt
+            - OUTPUT: số lần lặp, hội tụ hay không, giá trị đổi biến t, giá trị
+            quy theo x
+            - CODE : VD chạy thuật toán trên tất cả các đoạn lặp TIẾN:
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            result = []                                                           
+            for X,Y in forward:                                                   
+            result.append(mainNewtonForwardReverse(X, Y, 0.91106, 0.00001))       
+            for i,(solanlap, hoituhaykhong, t,x) in enumerate(result):            
+                print("Đoạn số {0}, số lần lặp: {1}, hội tụ: {2}, t = {3}, x = {4}".format(i,solanlap,hoituhaykhong,t,x)) 
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+        b. Phương pháp nội suy ngược Langrange
+            - Sử dụng hàm "findReverseLangrangeSegments" để tìm danh sách các đoạn
+            hợp lý, có thể đặt GIỚI HẠN số điểm nội suy trong hàm này.
+            - INPUT: dataX, dataY, giá trị nội suy ngược, số điểm nội suy ngược
+            - OUTPUT: danh sách các đoạn gồm danh sách giá trị x và danh sách giá
+            trị y,
+            - CODE: Tìm tất cả các đoạn Langrange với số mốc là 7
+        ╔═══════════════════════════════════════════════════════════════════════╗
+            all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7) 
+        ╚═══════════════════════════════════════════════════════════════════════╝
+            - Sử dụng hàm "wrapperReverseLangrange" để giải bài toán nội suy ngược
+            - INPUT: dataX, dataY, giá trị cần nội suy ngược
+            - OUTPUT: Hàm in ra:
+                - Dữ liệu Y , Dữ liệu x
+                - Đa thức tích W 
+                - Hệ số đa thức nội suy ngược thu được (a0 -> aN)
+                - Giá trị nội suy ngược tìm được
+            - CODE: Nội suy ngược tất cả các đoạn tìm được:
+        ╔═══════════════════════════════════════════════════════════════╗
+            for segment_x, segment_y in all_segments:
+                wrapperReverseLangrange(segment_x,segment_y,0.91106) 
+        ╚═══════════════════════════════════════════════════════════════╝    
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ Chỉnh sửa các hàm trong thư mục "reverseInterpolation/", chỉnh sửa hàm    │
+    │ input ở "dataProcess/" ứng với các file. Tuỳ chỉnh các hàm để xuất nhập   │
+    │ dữ liệu cần thiết                                                         │           
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+    4. Sử dụng các phương pháp tích phân

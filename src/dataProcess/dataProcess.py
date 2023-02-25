@@ -86,25 +86,25 @@ def findReverseLangrangeSegments(dataX, dataY, value_to_iterate, count_all_point
             else :
                 num_right += 1
         index = num_left
-        take_left = index - np.floor((count_all_points+1)/2)
-        take_right = index + np.floor((count_all_points)/2)
+        take_left = int(index - np.floor((count_all_points+1)/2))
+        take_right = int(index + np.floor((count_all_points)/2))
         count_this_loop = count_all_points
         while take_right - take_left > count_all_points:
             print("Có đoạn không thể lấy được đủ {0} điểm, thử lấy ít đi 1 điểm.".format(count_all_points))
             count_this_loop -= 1
-            take_left = index - np.floor((count_this_loop+1)/2)
-            take_right = index + np.floor((count_this_loop)/2)
-        langrange_result.append((segment_x[take_left, take_right], segment_y[take_left: take_right]))
+            take_left = int(index - np.floor((count_this_loop+1)/2))
+            take_right = int(index + np.floor((count_this_loop)/2))
+        langrange_result.append((segment_x[take_left: take_right], segment_y[take_left: take_right]))
     return langrange_result
 
 # ____________________________TEST_________________________________
-dataX = [1., 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2. ]
-dataY = [1.00000, 0.97350, 0.95135, 0.93304, 0.91817, 0.90640, 0.89747, 0.89115, 0.88726, 0.88565, 0.88623, 0.88887, 0.89352, 0.90012, 0.90864, 0.91906, 0.93138, 0.94561, 0.96177, 0.97988, 1.00000]
-#(x,y) = findNewtonFixedPointSegments(dataX,dataY, 0.91106)
-z = findReverseLangrangeSegments(dataX,dataY, 0.91106,7)
-#for x1 in x:
-#    print(x1)
-#for y1 in y:
-#    print(y1)
-for z1 in z:
-    print(z1)
+#dataX = [1., 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2. ]
+#dataY = [1.00000, 0.97350, 0.95135, 0.93304, 0.91817, 0.90640, 0.89747, 0.89115, 0.88726, 0.88565, 0.88623, 0.88887, 0.89352, 0.90012, 0.90864, 0.91906, 0.93138, 0.94561, 0.96177, 0.97988, 1.00000]
+##(x,y) = findNewtonFixedPointSegments(dataX,dataY, 0.91106)
+#z = findReverseLangrangeSegments(dataX,dataY, 0.91106,7)
+##for x1 in x:
+##    print(x1)
+##for y1 in y:
+##    print(y1)
+#for z1 in z:
+#    print(z1)
