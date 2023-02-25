@@ -17,7 +17,8 @@ eps = 10e-9
 def simpsonQuadraticGrid(equation ,variable, start, end, num_step,eps):
     # khởi tạo chung
     all_grid_result = []
-    equation = sp.lambdify(variable,equation,'numpy')
+    if(isinstance(equation,str)):
+        equation = sp.lambdify(variable,equation,'numpy')
 
     # khởi tạo grid1
     gridX = np.linspace(start,end,num_step + 1)
@@ -51,7 +52,7 @@ def simpsonQuadraticGrid(equation ,variable, start, end, num_step,eps):
         compare_value1 = all_grid_result[-1][0]
         compare_value2 = all_grid_result[-2][0]
     
-    return all_grid_result[-1]
+    return all_grid_result
 
 #___________________________________VD chạy code________________________________
 # result, num_step = simpsonQuadraticGrid(equation, variable,a,b, 10, 5e-8)

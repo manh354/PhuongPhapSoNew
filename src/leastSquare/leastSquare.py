@@ -14,7 +14,8 @@ import matplotlib.pyplot as plt
 #param_start = [1,1]
 
 def wrapperLeastSquare(dataX, dataY, adjustable_parameters,independent_variable,fitting_function,param_start):
-
+    dataX = np.array(dataX)
+    dataY = np.array(dataY)
     partial_derivatives = [(sp.diff(fitting_function, param)) for param in adjustable_parameters]
     print(partial_derivatives)
     if(isinstance(fitting_function, str)):

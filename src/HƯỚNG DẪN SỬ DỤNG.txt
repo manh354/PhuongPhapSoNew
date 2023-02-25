@@ -48,10 +48,12 @@ II. Hướng dẫn cụ thể
             dataX, dataY = readVertical()     
             wrapperGauss1(dataX,dataY,1.43)   
         ╚═══════════════════════════════════╝
+
     ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
     │ Chỉnh sửa wrapper trong thư mục "interpolation/", các hàm wrapper tương    │
     │ ứng với các file. Tuỳ chỉnh wrapper để xuất dữ liệu mong muốn.             │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
 
     3. Sử dụng nội suy ngược
         - Sử dụng dataX, dataY
@@ -80,6 +82,7 @@ II. Hướng dẫn cụ thể
             for i,(solanlap, hoituhaykhong, t,x) in enumerate(result):            
                 print("Đoạn số {0}, số lần lặp: {1}, hội tụ: {2}, t = {3}, x = {4}".format(i,solanlap,hoituhaykhong,t,x)) 
         ╚═══════════════════════════════════════════════════════════════════════════╝
+
         b. Phương pháp nội suy ngược Langrange
             - Sử dụng hàm "findReverseLangrangeSegments" để tìm danh sách các đoạn
             hợp lý, có thể đặt GIỚI HẠN số điểm nội suy trong hàm này.
@@ -102,10 +105,140 @@ II. Hướng dẫn cụ thể
             for segment_x, segment_y in all_segments:
                 wrapperReverseLangrange(segment_x,segment_y,0.91106) 
         ╚═══════════════════════════════════════════════════════════════╝    
+
     ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
     │ Chỉnh sửa các hàm trong thư mục "reverseInterpolation/", chỉnh sửa hàm    │
     │ input ở "dataProcess/" ứng với các file. Tuỳ chỉnh các hàm để xuất nhập   │
     │ dữ liệu cần thiết                                                         │           
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
 
+
     4. Sử dụng các phương pháp tích phân
+        a. Phương pháp Simpson tính tích phân hàm CHƯA BIẾT
+            - Sử dụng dataX, dataY
+            - Sử dụng hàm "simpsonQuadraticDiscrete" để giải bài toán tính
+            tích phân hàm không có công thức cụ thể.
+            - INPUT: kích cỡ giữa 2 điểm liên tiếp, dataY, số khoảng tính tích
+            phân
+            - OUTPUT: giá trị tích phân tính được
+            - CODE: Tính giá trị tích phân cho lưới nguyên bản.
+        ╔══════════════════════════════════════════════════════════════════╗
+            simpsonQuadraticDiscrete(dataX[1]-dataX[0],dataY,len(dataX)-1) 
+        ╚══════════════════════════════════════════════════════════════════╝
+
+        b. Sử dụng ý a) để đánh giá sai số phương pháp
+            - Sử dụng hàm "halvesGrid" để làm giảm 1 nửa kích cỡ của Grid.
+            - INPUT: dataY
+            - OUTPUT: dataY đã bị giảm 1 nửa.
+            - Tiếp tục sử dụng ý a) cho Grid mới và đánh giá sai số với giá trị
+            1/15*| I_h - I_2h|
+            - CODE: Tính giá trị tích phân theo lưới H và 2H, đánh giá sai số
+            thu được:
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            dataX, dataY = readVertical()
+            resultH = simpsonQuadraticDiscrete(dataX[1]-dataX[0],dataY,len(dataX)-1)
+            dataY2H = halvesGrid(dataY)
+            result2H = simpsonQuadraticDiscrete(dataX[2]-dataX[0], dataY2H, len(dataY2H)-1)
+            error_limit = 1.0/15.0 * abs(resultH - result2H)
+            print("Giá trị tích phân: {0}, sai số nhỏ hơn {1}: ".format(resultH, error_limit))
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+        c. Phương pháp Simpson tính tích phân hàm đã biết, giới hạn sai số.
+
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ ! Cần sử dụng thành thạo thư viện SYMPY để hiểu rõ về phần này             │                                │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
+            - Sử dụng hàm "simpsonQuadraticGrid" để giải quyết bài toán tính 
+            tích phân biết trước hàm cụ thể và sai số cần đạt.
+            - INPUT: hàm số dạng string, biến chạy dạng string, giá trị bắt đầu,
+            giá trị kết thúc của tích phân, số lượng khoảng trong lưới phủ đầu 
+            tiên, độ chính xác cần đạt.
+            - OUTPUT: Danh sách giá trị tích phân cần tính, số lượng khoảng trong
+            lưới.
+            - CODE: Tính tích phân 1/(1+x^2) từ 1 đến 3 = arctan(3)
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            equation = "1/(1+x**2)"
+            var = sp.Symbol('x')
+            start = 0
+            end = 3
+            num_step =2
+            eps = 0.0000001
+
+            results = simpsonQuadraticGrid(equation,var, start, end, num_step,eps)
+            for i,result in enumerate(results):
+                print("Số lượng khoảng grid {0}: {1}, giá trị: {2}".format(i,result[1], result[0]))
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+    
+
+    5. Sử dụng Bình phương tối thiểu
+        - Sử dụng hàm "lqLeastSquare" để thực hiện bình phương tối thiểu 
+        - INPUT: dataX, dataY, tên các biến số phụ thuộc để thực hiện leastSquare, 
+        tên biến tự do, hàm số cần fit, giá trị khởi tạo của các biến phụ thuộc
+        - OUTPUT: số lần lặp cần thiết, kết quả giá trị leastSquare thu được
+            - Hàm số in ra số lần lặp và giá trị các biến số phụ thuộc trong mỗi
+            lần lặp ấy.
+        - CODE: Sử dụng leastSquare một bộ dữ liệu cho trước, với hàm chọn là một
+        hàm đa thức bậc 3.
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            dataX, dataY = readVertical()
+            adjustable_parameters = sp.symbols("a b c d")
+            independent_variable = sp.Symbol('x')
+            fitting_function = "a*x**3 + b*x**2 + c*x**1 + d"
+            param_start = [0,0,0,0]
+            lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable, fitting_function, param_start)
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ ! Hàm này sử dụng phương pháp GAUSS - NEWTON KHÔNG được dạy trên lớp       │
+    │ Sử dụng không được điểm, mình không chịu trách nhiệm.                      │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+    
+        - Sử dụng hàm "drawLeastSquare" để thực hiện vẽ hàm tìm được.
+        - Sử dụng hàm "getLamdifiedFunction" để chuyển hàm kiểu xâu về dạng mã máy
+        - INPUT: dataX, dataY, Hàm số cần fit, giá trị các biến phụ thuộc sau khi
+        thực hiện leastSquare.
+        - OUTPUT: Hàm không trả về dữ liệu nào.
+            - Hàm thực hiện vẽ leastSquare hàm tìm được, và vẽ bộ điểm cho trước.
+        - CODE: Vẽ leastSquare vừa thực hiện bên trên.
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            i, result = lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable, fitting_function, param_start)
+            fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
+            drawLeastSquare(dataX,dataY,fitting_function,result)
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ ! Sửa leastSquare ở "leastSquare/leastSquare.py".                          │
+    │ ! Mỗi khi nhập liệu, nhớ kiểm tra có đủ số biến dữ liệu, dữ liệu bắt đầu.  │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙    
+
+    6. Sử dụng Spline bậc 3
+        - Sử dụng hàm "mainNaturalCubicSpline" để thực hiện tìm spline bậc 3 với dữ
+        liệu đã cho.
+        - INPUT: dataX, dataY
+        - OUTPUT: Danh sách tất cả các (hàm bậc 3, điểm đầu điểm cuối) của spline
+        - Sử dụng hàm "plotCubicSpline" để thực hiện vẽ tất cả hàm spline này cùng
+        với dữ liệu đã cho.
+        - INPUT: dataX, dataY
+        - OUTPUT: Hàm không trả về giá trị nào
+            - Hàm vẽ ra spline đi qua các điểm.
+        - CODE: Thực hiện tạo spline đi qua các điểm dataX, dataY và in kết quả chi
+        tiết:
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            dataX, dataY = readVertical()
+            all_splines = mainNaturalCubicSpline(dataX,dataY)
+            for i, spline_coefs in enumerate(all_splines):
+                output = "spline số {0}, Hệ số: {1} \nĐiểm bắt đầu: {2}, điểm kết thúc {3}".format(i, spline_coefs, dataX[i], dataX[i+1] )
+                print(output)
+            plotCubicSpline(dataX, dataY, all_splines)
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ ! Sửa spline ở "interpolation/spline.py".                                  │
+    │ ! Mỗi khi nhập liệu, hãy sử dụng bộ dữ liệu vừa phải, đã qua xử lý để cắt  │
+    │   ngắn sao cho dưới 10 điểm.                                               │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙  
+
+
+    7. Sử dụng phương trình vi phân
+        - Dùng hàm trong "mainDifferentialEquation.py"

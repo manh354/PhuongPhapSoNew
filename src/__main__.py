@@ -9,7 +9,7 @@ from intergration.simpson import simpsonQuadraticGrid
 # result, num_step = simpsonQuadraticGrid(equation, variable,a,b, 10, 5e-8)
 # print("Kết quả cuối cùng thu được: {0} \tsau số bước: {1}".format(result,num_step))
 from intergration.simpsonDiscrete import simpsonQuadraticDiscrete, halvesGrid
-# error_limit = 1.0/3.0 * abs(integrated_result - integrated_result2)
+# error_limit = 1.0/15.0 * abs(resultH - result2H)
 # print("Đánh giá sai số nhỏ hơn: ", error_limit)
 from dataSlicing.dataSlicingCenter import sliceInputFromCenterGauss1, sliceInputFromCenterGauss2,sliceInputFromCenterBessel,sliceInputFromCenterStirling
 from dataSlicing.dataSlicingLangrange import sliceInputFromLeftToRight
@@ -24,6 +24,8 @@ from interpolation.bessel import wrapperBesselNorm,wrapperBesselSkewed
 from interpolation.newtonForward import wrapperNewtonForwardAny,wrapperNewtonForwardEqui
 from interpolation.newtonBackward import wrapperNewtonBackwardAny, wrapperNewtonBackwardEqui
 from interpolation.stirling import wrapperStirling
+# Spline
+from interpolation.spline import mainNaturalCubicSpline, plotCubicSpline,getCubicSpline
 from leastSquare.leastSquare import wrapperLeastSquare as lqLeastSquare
 from leastSquare.leastSquare import drawLeastSquare
 # adjustable_parameters = sp.symbols("a c")
@@ -51,9 +53,43 @@ from differentialEquation.adamsMoulton import mainAdamsMoulton
 # Test = False
 
 dataX, dataY = readVertical()
-all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7)
-for segment_x, segment_y in all_segments:
-    wrapperReverseLangrange(segment_x,segment_y,0.91106)
+
+#all_splines = mainNaturalCubicSpline(dataX,dataY)
+#for i, spline_coefs in enumerate(all_splines):
+#    output = "spline số {0}, Hệ số: {1} \nĐiểm bắt đầu: {2}, điểm kết thúc {3}".format(i, spline_coefs, dataX[i], dataX[i+1] )
+#    print(output)
+#plotCubicSpline(dataX, dataY, all_splines)
+
+
+#adjustable_parameters = sp.symbols("a b c d")
+#independent_variable = sp.Symbol('x')
+#fitting_function = "a*x**3 + b*x**2 + c*x**1 + d"
+#param_start = [0,0,0,0]
+#
+#i, result = lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable, fitting_function, param_start)
+#fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
+#drawLeastSquare(dataX,dataY,fitting_function,result)
+
+#equation = "1/(1+x**2)"
+#var = sp.Symbol('x')
+#start = 0
+#end = 3
+#num_step =2
+#eps = 0.0000001
+#
+#results = simpsonQuadraticGrid(equation,var, start, end, num_step,eps)
+#for i,result in enumerate(results):
+#    print("Số lượng khoảng grid {0}: {1}, giá trị: {2}".format(i,result[1], result[0]))
+
+#resultH = simpsonQuadraticDiscrete(dataX[1]-dataX[0],dataY,len(dataX)-1)
+#dataY2H = halvesGrid(dataY)
+#result2H = simpsonQuadraticDiscrete(dataX[2]-dataX[0], dataY2H, len(dataY2H)-1)
+#error_limit = 1.0/15.0 * abs(resultH - result2H)
+#print("Giá trị tích phân: {0}, sai số nhỏ hơn {1}: ".format(resultH, error_limit))
+
+#all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7)
+#for segment_x, segment_y in all_segments:
+#    wrapperReverseLangrange(segment_x,segment_y,0.91106)
 
 #forward, backward = findNewtonFixedPointSegments(dataX,dataY,0.91106)
 #result = []
