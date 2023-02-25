@@ -1,0 +1,29 @@
+#############################################################################
+################## Chào mừng bạn đến với hướng dẫn sử dụng ##################
+#############################################################################
+#                                                                           #
+#  Trong hướng dẫn này, mình sẽ chỉ cách để ghép các module code với nhau.  #
+-----------------------------------------------------------------------------
+I. Tổng quan
+    - Để thực hiện tốt nhất, chạy code từ file __main__.py . File này đã import
+    tất cả các module trong chương trình.
+    - Bạn có thể chạy trực tiếp ở từng file nhỏ nếu muốn. Bạn cần gọi hàm trong
+    file, nhập dữ liệu bằng tay nên sẽ có thể gây bất tiện hơn.
+II. Hướng dẫn cụ thể
+    - Dưới đây sẽ là hướng dẫn sử dụng hàm từ file __main__.py
+    1. Nhập dữ liệu đầu vào ("dataX", "dataY")
+        - Đổi tên thư mục thành "PhuongPhapSoNew"
+        - Nhập dữ liệu sẵn vào file data/discreteDataVertical.csv
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ Có file excel sẵn để xử lý dữ liệu dễ hơn. Sau khi xử lý trong excel, bạn  │
+    │ xuất ra file data/discreteDataVertical.csv                                 │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+        - Trong hàm __main__.py, gọi hàm readVertical():
+            dataX, dataY = readVertical()
+        - Hàm này sẽ tự động trả về dữ liệu từ file .csv
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ Chỉnh sửa path trong file "dataInput.py".                                  │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+    2. Sử dụng Nội suy
+        - Sử dụng dataX, dataY.
+        -

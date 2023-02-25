@@ -52,7 +52,7 @@ from differentialEquation.adamsMoulton import mainAdamsMoulton
 
 dataX, dataY = readVertical()
 x = sp.Symbol("x")
-simpsonQuadraticGrid(fitting)
+simpsonQuadraticGrid()
 
 #x,y,a,b = findSegmentContainsRoot(dataX, dataY, 0.90912)
 #
