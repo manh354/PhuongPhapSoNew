@@ -1,6 +1,7 @@
 import numpy as np
 
 # đã kiểm thử ra kết quả đúng
+#_________________________________Copy vào main nếu cần________________________________________#
 #a = 1
 #b = 2
 #h = 0.05
@@ -18,9 +19,10 @@ import numpy as np
 def simpsonQuadraticDiscrete(interval_size, dataY, num_step):
     simpsonsY = [4*y if i%2 != 0 else 2*y for (i,y) in enumerate(dataY)]
     simpsonsY[0] = dataY[0]
-    simpsonsY[-1] = dataY[-1]
+    simpsonsY[len(dataY)-1] = dataY[len(dataY)-1]
     integrated_result =  np.multiply(interval_size/3,np.sum(simpsonsY))
     print("Giá trị tích phân với grid = {0} là: {1}".format(num_step,integrated_result))
+    return integrated_result
 
 def halvesGrid(dataY):
     dataY2 = []

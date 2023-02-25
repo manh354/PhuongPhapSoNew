@@ -172,4 +172,3 @@ def fixedpointIterationForAM(lamdified_equation_system,number_of_points_used : i
 def getAdamsBashfortMethodWithThisNumberOfPoints(n):
     createLookupTableForAMMethod(n)
 
-getAdamsBashfortMethodWithThisNumberOfPoints(8)
