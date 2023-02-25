@@ -1,9 +1,9 @@
-from differentialEquation.eulerForward import mainEulerForward
-from differentialEquation.eulerBackward import mainEulerBackward
-from differentialEquation.trapezoid import mainTrapezoid
-from differentialEquation.rungeKutta import mainRungeKutta4_Classic, mainRungaKutta3_Heun, mainRungaKutta3_Kutta, mainRungeKutta2_Heun
-from differentialEquation.adamsBashfort import mainAdamsBashfort
-from differentialEquation.adamsMoulton import mainAdamsMoulton
+from differentialEquation.eulerForward import deEulerForward
+from differentialEquation.eulerBackward import deEulerBackward
+from differentialEquation.trapezoid import deTrapezoid
+from differentialEquation.rungeKutta import deRungeKutta4_Classic, deRungaKutta3_Heun, deRungaKutta3_Kutta, deRungeKutta2_Heun
+from differentialEquation.adamsBashfort import deAdamsBashfort
+from differentialEquation.adamsMoulton import deAdamsMoulton
 from differentialEquation.adamsPredictorCorrector import mainAdamsPredictorCorrector
 import sympy as sp
 import numpy as np
@@ -22,7 +22,7 @@ Test = False
 
 
 def main2D(func):
-    if(func == mainAdamsBashfort or func == mainAdamsPredictorCorrector or func == mainAdamsMoulton):
+    if(func == deAdamsBashfort or func == mainAdamsPredictorCorrector or func == deAdamsMoulton):
         list_result_t , list_result_var = func(7,deriv_equations,variables,t,vars_start,t_start,t_end,h)
     else: 
         list_result_t , list_result_var = func(deriv_equations,variables,t,vars_start,t_start,t_end,h)
@@ -40,7 +40,7 @@ def mainTest2D(func):
     groundtruth_t = np.linspace(t_start,t_end+h,1000)
     groundtruth_var = [[lamdified_equation(t) for t in groundtruth_t] for lamdified_equation in lamdified_equation_system]
 
-    if(func == mainAdamsBashfort or func == mainAdamsMoulton or func == mainAdamsPredictorCorrector):
+    if(func == deAdamsBashfort or func == deAdamsMoulton or func == mainAdamsPredictorCorrector):
         list_result_t , list_result_var = func(7,deriv_equations,variables,t,vars_start,t_start,t_end,h)
     else: 
         list_result_t , list_result_var = func(deriv_equations,variables,t,vars_start,t_start,t_end,h)
@@ -82,35 +82,35 @@ def main3D(func):
 def test():
     print("Euler hiện: ")
     print("=============================================================================")
-    mainTest2D(mainEulerForward)
+    mainTest2D(deEulerForward)
     plt.show()
     print("Euler ẩn: ")
     print("=============================================================================")
-    mainTest2D(mainEulerBackward)
+    mainTest2D(deEulerBackward)
     plt.show()
     print("Thang ẩn: ")
     print("=============================================================================")
-    mainTest2D(mainTrapezoid)
+    mainTest2D(deTrapezoid)
     plt.show()
     print("RK3 Heun: ")
     print("=============================================================================")
-    mainTest2D(mainRungaKutta3_Heun)
+    mainTest2D(deRungaKutta3_Heun)
     plt.show()
     print("RK3 Kutta: ")
     print("=============================================================================")
-    mainTest2D(mainRungaKutta3_Kutta)
+    mainTest2D(deRungaKutta3_Kutta)
     plt.show()
     print("RK4 Cổ điển: ")
     print("=============================================================================")
-    mainTest2D(mainRungeKutta4_Classic)
+    mainTest2D(deRungeKutta4_Classic)
     plt.show()
     print("AB tuỳ chọn: ")
     print("=============================================================================")
-    mainTest2D(mainAdamsBashfort)
+    mainTest2D(deAdamsBashfort)
     plt.show()
     print("AM 4: ")
     print("=============================================================================")
-    mainTest2D(mainAdamsMoulton)
+    mainTest2D(deAdamsMoulton)
     plt.show()
     print("AB-AM PC 4: ")
     print("=============================================================================")
@@ -123,56 +123,56 @@ def solve():
     if(typeOfGraph == '3d'):
         print("Euler hiện: ")
         print("=============================================================================")
-        main3D(mainEulerForward)
+        main3D(deEulerForward)
         plt.show()
         print("Euler ẩn: ")
         print("=============================================================================")
-        main3D(mainEulerBackward)
+        main3D(deEulerBackward)
         plt.show()
         print("Thang ẩn: ")
         print("=============================================================================")
-        main3D(mainTrapezoid)
+        main3D(deTrapezoid)
         plt.show()
         print("RK3 Heun: ")
         print("=============================================================================")
-        main3D(mainRungaKutta3_Heun)
+        main3D(deRungaKutta3_Heun)
         plt.show()
         print("RK3 Kutta: ")
         print("=============================================================================")
-        main3D(mainRungaKutta3_Kutta)
+        main3D(deRungaKutta3_Kutta)
         plt.show()
         print("RK4 Cổ điển: ")
         print("=============================================================================")
-        main3D(mainRungeKutta4_Classic)
+        main3D(deRungeKutta4_Classic)
         plt.show()
     if(typeOfGraph == '2d'):
-        #print("Euler hiện: ")
-        #print("=============================================================================")
-        #main2D(mainEulerForward)
-        #plt.show()
-        #print("Euler ẩn: ")
-        #print("=============================================================================")
-        #main2D(mainEulerBackward)
-        #plt.show()
-        #print("Thang ẩn: ")
-        #print("=============================================================================")
-        #main2D(mainTrapezoid)
-        #plt.show()
-        #print("RK3 Heun: ")
-        #print("=============================================================================")
-        #main2D(mainRungaKutta3_Heun)
-        #plt.show()
-        #print("RK3 Kutta: ")
-        #print("=============================================================================")
-        #main2D(mainRungaKutta3_Kutta)
-        #plt.show()
+        print("Euler hiện: ")
+        print("=============================================================================")
+        main2D(deEulerForward)
+        plt.show()
+        print("Euler ẩn: ")
+        print("=============================================================================")
+        main2D(deEulerBackward)
+        plt.show()
+        print("Thang ẩn: ")
+        print("=============================================================================")
+        main2D(deTrapezoid)
+        plt.show()
+        print("RK3 Heun: ")
+        print("=============================================================================")
+        main2D(deRungaKutta3_Heun)
+        plt.show()
+        print("RK3 Kutta: ")
+        print("=============================================================================")
+        main2D(deRungaKutta3_Kutta)
+        plt.show()
         print("RK4 Cổ điển: ")
         print("=============================================================================")
-        main2D(mainRungeKutta4_Classic)
-        
+        main2D(deRungeKutta4_Classic)
+        plt.show()
         print("RK 2 heun: ")        
         print("=============================================================================")
-        main2D(mainRungeKutta2_Heun)
+        main2D(deRungeKutta2_Heun)
         plt.show()
         #print("AB 4: ")
         #print("=============================================================================")
@@ -188,6 +188,8 @@ def solve():
         #plt.show()
         dummy()
 
+def dummy():
+    return
 
 def chooseFunc():
     if(len(variables) ==3):
@@ -199,6 +201,3 @@ if(Test):
     test()
 else:
     solve()
-
-def dummy():
-    return

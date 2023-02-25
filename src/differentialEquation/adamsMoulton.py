@@ -131,7 +131,7 @@ def makeAMWorks(number_of_points_used, symbolic_function_system : list, symbolic
     return multiple_points_t_start, multiple_points_vars_start
 
 
-def mainAdamsMoulton(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
+def deAdamsMoulton(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
     lookup_table = createLookupTableForAMMethod(number_of_points_used)
     multiple_points_t_start, multiple_points_vars_start = makeAMWorks(number_of_points_used, symbolic_function_system , symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h)
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
@@ -162,6 +162,20 @@ def fixedpointIterationForAM(lamdified_equation_system,number_of_points_used : i
     vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))
     i = 1
     while (np.sum(np.abs(np.subtract(vars_iterate_new, vars_iterate))) >= epsilon) and (i < terminate_threshold):
+        vars_iterate = vars_iterate_new.copy()
+        equation_system_values_at_iterate = [equation((vars_iterate),t_iterate) for equation in lamdified_equation_system]
+        vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))
+        i += 1
+    return vars_iterate_new
+
+def AMCorrector(lamdified_equation_system,number_of_points_used : int, lookup_table, sum_of_equation_system_value_from_i1_to_iN ,vars_start : list, t_start, h : float ,EPS, ITR_MAX):
+    vars_iterate = vars_start.copy()
+    t_iterate = t_start + h
+    coef = lookup_table[number_of_points_used-1][0]
+    equation_system_values_at_iterate = [equation((vars_iterate),t_iterate) for equation in lamdified_equation_system]
+    vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))
+    i = 1
+    while (np.sum(np.abs(np.subtract(vars_iterate_new, vars_iterate))) >= EPS) and (i < ITR_MAX):
         vars_iterate = vars_iterate_new.copy()
         equation_system_values_at_iterate = [equation((vars_iterate),t_iterate) for equation in lamdified_equation_system]
         vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))

@@ -35,32 +35,38 @@ from leastSquare.leastSquare import drawLeastSquare
 # param_start = [1,1]
 from reverseInterpolation.newtonFixedPointIteration import mainNewtonBackwardReverse, mainNewtonForwardReverse
 from reverseInterpolation.reverseLangrange import wrapperReverseLangrange
-from differentialEquation.eulerForward import mainEulerForward
-from differentialEquation.eulerBackward import mainEulerBackward
-from differentialEquation.trapezoid import mainTrapezoid
-from differentialEquation.rungeKutta import mainRungeKutta2_Heun, mainRungaKutta3_Kutta, mainRungaKutta3_Heun, mainRungeKutta4_Classic
-from differentialEquation.adamsBashfort import mainAdamsBashfort
-from differentialEquation.adamsMoulton import mainAdamsMoulton
-# t = sp.symbols('t') 
-# 
-# variables = sp.symbols("x y")
-# deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)","-0.35*y+0.35*x**2*y/(1+15*x**2)"]
-# groundtruth_equations=["-cos(t)","sin(t)"]
-# vars_start = [6,4]
-# t_start = 0
-# t_end = 10
-# h = 0.1
-# Test = False
+
+from differentialEquation.eulerForward import deEulerForward , eulerForwardPredictor
+from differentialEquation.eulerBackward import deEulerBackward, eulerBackwardCorrector
+from differentialEquation.trapezoid import deTrapezoid, trapezoidCorrector
+from differentialEquation.rungeKutta import deRungeKutta2_Heun, deRungaKutta3_Kutta, deRungaKutta3_Heun, deRungeKutta4_Classic
+from differentialEquation.adamsBashfort import deAdamsBashfort, adamsBashfortPredictor
+from differentialEquation.adamsMoulton import deAdamsMoulton
+from differentialEquation.solutionDrawer import deSolveAndDraw2D, deSolveAdamsBashfortAndDraw2D, deSolvePCAndDraw2D
+
 
 dataX, dataY = readVertical()
 
+symbolic_t = sp.symbols('t') 
+symbolic_vars = sp.symbols("x y")
+deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)","-0.35*y+0.35*x**2*y/(1+15*x**2)"]
+vars_start = [6,4]
+t_start = 0
+t_end = 10
+h = 0.1
+i_to_print = [1,2,3,-1,-2,-3]
+list_result_t, list_result_vars = deSolveAdamsBashfortAndDraw2D(4,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
+for i in i_to_print:
+    print("t {0}: ".format(i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
+plt.show()
+''' SPLINE bậc 3'''
 #all_splines = mainNaturalCubicSpline(dataX,dataY)
 #for i, spline_coefs in enumerate(all_splines):
 #    output = "spline số {0}, Hệ số: {1} \nĐiểm bắt đầu: {2}, điểm kết thúc {3}".format(i, spline_coefs, dataX[i], dataX[i+1] )
 #    print(output)
 #plotCubicSpline(dataX, dataY, all_splines)
 
-
+''' LEASTSQUARE '''
 #adjustable_parameters = sp.symbols("a b c d")
 #independent_variable = sp.Symbol('x')
 #fitting_function = "a*x**3 + b*x**2 + c*x**1 + d"
@@ -70,6 +76,7 @@ dataX, dataY = readVertical()
 #fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
 #drawLeastSquare(dataX,dataY,fitting_function,result)
 
+''' SIMPSON hàm biết trước '''
 #equation = "1/(1+x**2)"
 #var = sp.Symbol('x')
 #start = 0
@@ -81,16 +88,19 @@ dataX, dataY = readVertical()
 #for i,result in enumerate(results):
 #    print("Số lượng khoảng grid {0}: {1}, giá trị: {2}".format(i,result[1], result[0]))
 
+''' SIMPSON hàm không biết trước, đánh giá sai số'''
 #resultH = simpsonQuadraticDiscrete(dataX[1]-dataX[0],dataY,len(dataX)-1)
 #dataY2H = halvesGrid(dataY)
 #result2H = simpsonQuadraticDiscrete(dataX[2]-dataX[0], dataY2H, len(dataY2H)-1)
 #error_limit = 1.0/15.0 * abs(resultH - result2H)
 #print("Giá trị tích phân: {0}, sai số nhỏ hơn {1}: ".format(resultH, error_limit))
 
+''' Nội suy ngược LAGRANGE '''
 #all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7)
 #for segment_x, segment_y in all_segments:
 #    wrapperReverseLangrange(segment_x,segment_y,0.91106)
 
+''' Nội suy ngược lặp NEWTON'''
 #forward, backward = findNewtonFixedPointSegments(dataX,dataY,0.91106)
 #result = []
 #for X,Y in forward:
@@ -99,6 +109,7 @@ dataX, dataY = readVertical()
 #    print("Đoạn số {0}, số lần lặp: {1}, hội tụ: {2}, t = {3}, x = {4}".format(i,solanlap,hoituhaykhong,t,x))
 #wrapperGauss1(dataX,dataY,1.43)
 
+''' BÌNH PHƯƠNG TỐI THIỂU LeastSquare xử lý phức tạp'''
 #x,y,a,b = findSegmentContainsRoot(dataX, dataY, 0.90912)
 #
 #adjustable_parameters = sp.symbols("a c")

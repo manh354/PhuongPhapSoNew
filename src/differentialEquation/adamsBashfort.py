@@ -132,7 +132,7 @@ def makeABWorks(number_of_points_used, symbolic_function_system : list, symbolic
     return multiple_points_t_start, multiple_points_vars_start
 
 
-def mainAdamsBashfort(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
+def deAdamsBashfort(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
     lookup_table = createLookupTableForABMethod(number_of_points_used)
     multiple_points_t_start, multiple_points_vars_start = makeABWorks(number_of_points_used, symbolic_function_system , symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h)
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
@@ -140,21 +140,29 @@ def mainAdamsBashfort(number_of_points_used : int,symbolic_function_system : lis
     list_result_vars = multiple_points_vars_start.copy()
     t_iterate = multiple_points_t_start[len(multiple_points_t_start)-1]
     while t_iterate < t_end:
-        position = len(list_result_vars) - 1
-        vars_iterate = list_result_vars[position]
-        t_iterate = list_result_t[position]
-        equation_system_values = np.zeros(len(symbolic_vars))
-        for i in range(0, number_of_points_used):
-            equation_system_values_at_i_points_back = [equation((list_result_vars[position - i]),list_result_t[position -i]) for equation in lamdified_equation_system]
-            equation_system_values_at_i_points_back = np.multiply(equation_system_values_at_i_points_back, lookup_table[number_of_points_used - 1][i])
-            equation_system_values = np.add(equation_system_values_at_i_points_back,equation_system_values)
-        vars_iterate = np.add(vars_iterate, np.multiply(h,equation_system_values)) # var = var + h * d(var)/dt 
+        vars_iterate = adamsBashfortPredictor(number_of_points_used,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
         t_iterate = t_iterate + h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
+def getAdamsBashfortMethod(number_of_points_used):
+    return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsBashfort(number_of_points_used,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
 
+def adamsBashfortPredictor(number_of_points_used,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h):
+    position = len(list_result_vars) - 1
+    vars_iterate = list_result_vars[position]
+    t_iterate = list_result_t[position]
+    equation_system_values = np.zeros(len(vars_iterate))
+    for i in range(0, number_of_points_used):
+        equation_system_values_at_i_points_back = [equation((list_result_vars[position - i]),list_result_t[position -i]) for equation in lamdified_equation_system]
+        equation_system_values_at_i_points_back = np.multiply(equation_system_values_at_i_points_back, lookup_table[number_of_points_used - 1][i])
+        equation_system_values = np.add(equation_system_values_at_i_points_back,equation_system_values)
+    vars_iterate = np.add(vars_iterate, np.multiply(h,equation_system_values)) # var = var + h * d(var)/dt 
+    return vars_iterate
 
-def getAdamsBashfortMethodWithThisNumberOfPoints(n):
-    createLookupTableForABMethod(n)
+def getAdamsBashfortPredictor(number_of_points):
+    lookup_table = createLookupTableForABMethod(number_of_points)
+    return lambda lamdified_equation_system,list_result_vars,list_result_t,h : adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
+    
+    

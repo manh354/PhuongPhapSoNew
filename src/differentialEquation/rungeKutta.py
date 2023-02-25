@@ -2,7 +2,7 @@ import numpy as np
 import sympy as sp
 
 
-def mainRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
+def deRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
     # khởi tạo tất cả giá trị, bao gồm biến chạy t, các biến giải vars, khởi tạo phương trình lambda để thuật toán xử lý dễ dàng hơn
     list_result_t = []
     list_result_vars = []
@@ -13,24 +13,29 @@ def mainRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : lis
     list_result_t.append(t_iterate)
     list_result_vars.append(vars_iterate)
     while t_iterate < t_end:
-        equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
-        vars_added_k1 = np.add(vars_iterate, np.multiply(0.5,equation_system_values_k1))
-        equation_system_values_k2 = np.multiply(h,[equation((vars_added_k1),t_iterate + 0.5*h) for equation in lamdified_equation_system])
-        vars_added_k2 = np.add(vars_iterate,np.multiply(0.5,equation_system_values_k2))
-        equation_system_values_k3 = np.multiply(h,[equation((vars_added_k2),t_iterate + 0.5*h) for equation in lamdified_equation_system])
-        vars_added_k3 = np.add(vars_iterate,np.multiply(1,equation_system_values_k3))
-        equation_system_values_k4 = np.multiply(h,[equation((vars_added_k3),t_iterate + h) for equation in lamdified_equation_system])
-        vars_added_all =                       np.multiply(1/6, equation_system_values_k1)
-        vars_added_all = np.add(vars_added_all,np.multiply(1/3, equation_system_values_k2))
-        vars_added_all = np.add(vars_added_all,np.multiply(1/3, equation_system_values_k3))
-        vars_added_all = np.add(vars_added_all,np.multiply(1/6, equation_system_values_k4))
-        vars_iterate = np.add(vars_iterate,vars_added_all)
-        t_iterate = t_iterate + h
+        vars_iterate =rungeKutta4_Classic_OneIteration(lamdified_equation_system,t_iterate,vars_iterate,h)
+        t_iterate += h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
-def mainRungaKutta3_Heun(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
+def rungeKutta4_Classic_OneIteration(lamdified_equation_system,t_iterate, vars_iterate,h):
+    equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
+    vars_added_k1 = np.add(vars_iterate, np.multiply(0.5,equation_system_values_k1))
+    equation_system_values_k2 = np.multiply(h,[equation((vars_added_k1),t_iterate + 0.5*h) for equation in lamdified_equation_system])
+    vars_added_k2 = np.add(vars_iterate,np.multiply(0.5,equation_system_values_k2))
+    equation_system_values_k3 = np.multiply(h,[equation((vars_added_k2),t_iterate + 0.5*h) for equation in lamdified_equation_system])
+    vars_added_k3 = np.add(vars_iterate,np.multiply(1,equation_system_values_k3))
+    equation_system_values_k4 = np.multiply(h,[equation((vars_added_k3),t_iterate + h) for equation in lamdified_equation_system])
+    vars_added_all =                       np.multiply(1/6, equation_system_values_k1)
+    vars_added_all = np.add(vars_added_all,np.multiply(1/3, equation_system_values_k2))
+    vars_added_all = np.add(vars_added_all,np.multiply(1/3, equation_system_values_k3))
+    vars_added_all = np.add(vars_added_all,np.multiply(1/6, equation_system_values_k4))
+    vars_iterate = np.add(vars_iterate,vars_added_all)
+    t_iterate = t_iterate + h
+    return vars_iterate
+
+def deRungaKutta3_Heun(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
     list_result_t = []
     list_result_vars = []
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
@@ -39,21 +44,25 @@ def mainRungaKutta3_Heun(symbolic_function_system : list, symbolic_vars : list[s
     list_result_t.append(t_iterate)
     list_result_vars.append(vars_iterate)
     while t_iterate < t_end:
-        equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
-        vars_for_k2 = np.add(vars_iterate, np.multiply(1/3,equation_system_values_k1))
-        equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 1/3*h) for equation in lamdified_equation_system])
-        vars_for_k3 = np.add(vars_iterate,np.multiply(2/3,equation_system_values_k2))
-        equation_system_values_k3 = np.multiply(h,[equation(vars_for_k3,t_iterate + 2/3*h) for equation in lamdified_equation_system])
-        vars_added_all =                       np.multiply(1/4, equation_system_values_k1)
-        vars_added_all = np.add(vars_added_all,np.multiply(3/4, equation_system_values_k3))
-        vars_iterate = np.add(vars_iterate,vars_added_all)
-        t_iterate = t_iterate + h
+        vars_iterate = rungeKutta3_Heun_OneIteration(lamdified_equation_system,t_iterate,vars_iterate,h)
+        t_iterate += h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
+
+def rungeKutta3_Heun_OneIteration(lamdified_equation_system,t_iterate, vars_iterate,h):
+    equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
+    vars_for_k2 = np.add(vars_iterate, np.multiply(1/3,equation_system_values_k1))
+    equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 1/3*h) for equation in lamdified_equation_system])
+    vars_for_k3 = np.add(vars_iterate,np.multiply(2/3,equation_system_values_k2))
+    equation_system_values_k3 = np.multiply(h,[equation(vars_for_k3,t_iterate + 2/3*h) for equation in lamdified_equation_system])
+    vars_added_all =                       np.multiply(1/4, equation_system_values_k1)
+    vars_added_all = np.add(vars_added_all,np.multiply(3/4, equation_system_values_k3))
+    vars_iterate = np.add(vars_iterate,vars_added_all)
+    return vars_iterate
 
 ## Hay còn gọi là RK3 mốc Simpson 
-def mainRungaKutta3_Kutta(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
+def deRungaKutta3_Kutta(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
     list_result_t = []
     list_result_vars = []
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
@@ -62,22 +71,26 @@ def mainRungaKutta3_Kutta(symbolic_function_system : list, symbolic_vars : list[
     list_result_t.append(t_iterate)
     list_result_vars.append(vars_iterate)
     while t_iterate < t_end:
-        equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
-        vars_for_k2 = np.add(vars_iterate, np.multiply(0.5,equation_system_values_k1))
-        equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 0.5*h) for equation in lamdified_equation_system])
-        vars_for_k3 = np.subtract(np.add(vars_iterate,np.multiply(2,equation_system_values_k2)),equation_system_values_k1)
-        equation_system_values_k3 = np.multiply(h,[equation(vars_for_k3,t_iterate + h) for equation in lamdified_equation_system])
-        vars_added_all =                       np.multiply(1/6, equation_system_values_k1)
-        vars_added_all = np.add(vars_added_all,np.multiply(2/3, equation_system_values_k2))
-        vars_added_all = np.add(vars_added_all,np.multiply(1/6, equation_system_values_k3))
-        vars_iterate = np.add(vars_iterate,vars_added_all)
-        t_iterate = t_iterate + h
+        vars_iterate = rungeKutta3_Kutta_OneIteration(lamdified_equation_system,t_iterate,vars_iterate,h)
+        t_iterate += h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
+def rungeKutta3_Kutta_OneIteration(lamdified_equation_system,t_iterate, vars_iterate,h):
+    equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
+    vars_for_k2 = np.add(vars_iterate, np.multiply(0.5,equation_system_values_k1))
+    equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 0.5*h) for equation in lamdified_equation_system])
+    vars_for_k3 = np.subtract(np.add(vars_iterate,np.multiply(2,equation_system_values_k2)),equation_system_values_k1)
+    equation_system_values_k3 = np.multiply(h,[equation(vars_for_k3,t_iterate + h) for equation in lamdified_equation_system])
+    vars_added_all =                       np.multiply(1/6, equation_system_values_k1)
+    vars_added_all = np.add(vars_added_all,np.multiply(2/3, equation_system_values_k2))
+    vars_added_all = np.add(vars_added_all,np.multiply(1/6, equation_system_values_k3))
+    vars_iterate = np.add(vars_iterate,vars_added_all)
+    return vars_iterate
+
 # RK2 Heun
-def mainRungeKutta2_Heun(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
+def deRungeKutta2_Heun(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
     list_result_t = []
     list_result_vars = []
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
@@ -86,13 +99,17 @@ def mainRungeKutta2_Heun(symbolic_function_system : list, symbolic_vars : list[s
     list_result_t.append(t_iterate)
     list_result_vars.append(vars_iterate)
     while t_iterate < t_end:
-        equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
-        vars_for_k2 = np.add(vars_iterate, np.multiply(1,equation_system_values_k1))
-        equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 0.5*h) for equation in lamdified_equation_system])
-        vars_added_all =                       np.multiply(1/2, equation_system_values_k1)
-        vars_added_all = np.add(vars_added_all,np.multiply(1/2, equation_system_values_k2))
-        vars_iterate = np.add(vars_iterate,vars_added_all)
-        t_iterate = t_iterate + h
+        vars_iterate = rungeKutta2_Heun_OneIteration(lamdified_equation_system,t_iterate,vars_iterate,h)
+        t_iterate += h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
+
+def rungeKutta2_Heun_OneIteration(lamdified_equation_system,t_iterate, vars_iterate,h):
+    equation_system_values_k1 = np.multiply(h,[equation((vars_iterate),t_iterate) for equation in lamdified_equation_system])
+    vars_for_k2 = np.add(vars_iterate, np.multiply(1,equation_system_values_k1))
+    equation_system_values_k2 = np.multiply(h,[equation(vars_for_k2,t_iterate + 0.5*h) for equation in lamdified_equation_system])
+    vars_added_all =                       np.multiply(1/2, equation_system_values_k1)
+    vars_added_all = np.add(vars_added_all,np.multiply(1/2, equation_system_values_k2))
+    vars_iterate = np.add(vars_iterate,vars_added_all)
+    return vars_iterate

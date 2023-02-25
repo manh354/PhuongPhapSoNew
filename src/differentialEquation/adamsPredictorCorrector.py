@@ -121,13 +121,6 @@ def createLookupTableForAMMethod(n):
         print(result[i])
     return result
 
-def makeAPCWorks(number_of_points_used, symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
-    if(multiple_points_t_start is float or int):
-        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,multiple_points_t_start + (3.1)*h,h)
-    if(number_of_points_used < len(multiple_points_t_start)):
-        position = len (multiple_points_t_start) -1
-        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start[position],multiple_points_t_start[position],multiple_points_t_start[position]+(number_of_points_used - position + 0.1)*h, h)
-    return multiple_points_t_start, multiple_points_vars_start
 
 def mainRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , vars_start: list[float], t_start: float, t_end: float,h : float):
     # khởi tạo tất cả giá trị, bao gồm biến chạy t, các biến giải vars, khởi tạo phương trình lambda để thuật toán xử lý dễ dàng hơn
@@ -157,6 +150,13 @@ def mainRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : lis
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
+def makeAPCWorks(number_of_points_used, symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
+    if(multiple_points_t_start is float or int):
+        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,multiple_points_t_start + (3.1)*h,h)
+    if(number_of_points_used < len(multiple_points_t_start)):
+        position = len (multiple_points_t_start) -1
+        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start[position],multiple_points_t_start[position],multiple_points_t_start[position]+(number_of_points_used - position + 0.1)*h, h)
+    return multiple_points_t_start, multiple_points_vars_start
 
 def mainAdamsPredictorCorrector(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
     ab_lookup_table = createLookupTableForABMethod(number_of_points_used)

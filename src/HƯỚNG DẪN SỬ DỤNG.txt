@@ -26,6 +26,7 @@ II. Hướng dẫn cụ thể
     ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
     │ Chỉnh sửa path trong file "dataInput.py".                                  │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙
+
     2. Sử dụng Nội suy
         - Sử dụng dataX, dataY.
         - Các hàm wrapper sau đây tương ứng với các hàm nội suy tương ứng:
@@ -63,12 +64,12 @@ II. Hướng dẫn cụ thể
             - INPUT: dataX, dataY, điểm cần nội suy ngược.
             - OUTPUT : Các đoạn dữ liệu sử dụng newton tiến, các đoạn dữ liệu sử 
             dụng newton lùi.
-            - CODE : VD chạy thuật toán 
+            - CODE : VD chạy thuật toán
         ╔═══════════════════════════════════════════════════════════════════════════╗
             forward, backward = findNewtonFixedPointSegments(dataX,dataY,0.91106) 
         ╚═══════════════════════════════════════════════════════════════════════════╝
             - Sử dụng "mainNewtonBackwardReverse" cho từng đoạn trong biến forward
-            ở trên để thực hiện thuật toán lặp newton tiến.
+            ở trên để thực hiện thuật toán lặp newton lùi.
             - Sử dụng "mainNewtonForwardReverse" cho từng đoạn trong biến backward
             ở trên để thực hiện thuật toán lặp newton tiến.
             - INPUT: dataX, dataY, giá trị cần nội suy ngược, độ chính xác cần đạt
@@ -78,22 +79,22 @@ II. Hướng dẫn cụ thể
         ╔═══════════════════════════════════════════════════════════════════════════╗
             result = []                                                           
             for X,Y in forward:                                                   
-            result.append(mainNewtonForwardReverse(X, Y, 0.91106, 0.00001))       
+                result.append(mainNewtonForwardReverse(X, Y, 0.91106, 0.00001))       
             for i,(solanlap, hoituhaykhong, t,x) in enumerate(result):            
                 print("Đoạn số {0}, số lần lặp: {1}, hội tụ: {2}, t = {3}, x = {4}".format(i,solanlap,hoituhaykhong,t,x)) 
         ╚═══════════════════════════════════════════════════════════════════════════╝
 
-        b. Phương pháp nội suy ngược Langrange
-            - Sử dụng hàm "findReverseLangrangeSegments" để tìm danh sách các đoạn
+        b. Phương pháp nội suy ngược Lagrange
+            - Sử dụng hàm "findReverseLagrangeSegments" để tìm danh sách các đoạn
             hợp lý, có thể đặt GIỚI HẠN số điểm nội suy trong hàm này.
             - INPUT: dataX, dataY, giá trị nội suy ngược, số điểm nội suy ngược
             - OUTPUT: danh sách các đoạn gồm danh sách giá trị x và danh sách giá
             trị y,
-            - CODE: Tìm tất cả các đoạn Langrange với số mốc là 7
+            - CODE: Tìm tất cả các đoạn Lagrange với số mốc là 7
         ╔═══════════════════════════════════════════════════════════════════════╗
-            all_segments = findReverseLangrangeSegments(dataX,dataY,0.91106,7) 
+            all_segments = findReverseLagrangeSegments(dataX,dataY,0.91106,7) 
         ╚═══════════════════════════════════════════════════════════════════════╝
-            - Sử dụng hàm "wrapperReverseLangrange" để giải bài toán nội suy ngược
+            - Sử dụng hàm "wrapperReverseLagrange" để giải bài toán nội suy ngược
             - INPUT: dataX, dataY, giá trị cần nội suy ngược
             - OUTPUT: Hàm in ra:
                 - Dữ liệu Y , Dữ liệu x
@@ -103,7 +104,7 @@ II. Hướng dẫn cụ thể
             - CODE: Nội suy ngược tất cả các đoạn tìm được:
         ╔═══════════════════════════════════════════════════════════════╗
             for segment_x, segment_y in all_segments:
-                wrapperReverseLangrange(segment_x,segment_y,0.91106) 
+                wrapperReverseLagrange(segment_x,segment_y,0.91106) 
         ╚═══════════════════════════════════════════════════════════════╝    
 
     ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
@@ -156,7 +157,7 @@ II. Hướng dẫn cụ thể
             tiên, độ chính xác cần đạt.
             - OUTPUT: Danh sách giá trị tích phân cần tính, số lượng khoảng trong
             lưới.
-            - CODE: Tính tích phân 1/(1+x^2) từ 1 đến 3 = arctan(3)
+            - CODE: Tính tích phân 1/(1+x^2) từ 0 đến 3 = arctan(3)
         ╔═══════════════════════════════════════════════════════════════════════════╗
             equation = "1/(1+x**2)"
             var = sp.Symbol('x')
