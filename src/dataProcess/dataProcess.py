@@ -53,6 +53,31 @@ def findSegmentContainsRoot(dataX,dataY, value):
     
     return usable_segments_x,usable_segments_y,usable_segments_x[number],usable_segments_y[number]
 
-def findNewtonFixedPointSegments(dataX, dataY, value):
+def findNewtonFixedPointSegments(dataX, dataY, value_to_iterate):
     monotonic_segments_list_x, monotonic_segments_list_y = findMonotonicSegments(dataX,dataY)
-    sable_segments_x, usable_segments_y = findAllSegmentContainPointY(monotonic_segments_list_x, monotonic_segments_list_y, value)
+    usable_segments_x, usable_segments_y = findAllSegmentContainPointY(monotonic_segments_list_x, monotonic_segments_list_y, value_to_iterate)
+    newton_forward_result = []
+    newton_backward_result = []
+    for segment_x, segment_y in zip(usable_segments_x,usable_segments_y):
+        # newton forward, backward and langrange
+        num_left = 0
+        num_right = 0
+        sign_of_segment = segment_y[0] - segment_y[1]
+        for x,y in zip(segment_x,segment_y):
+            if((y - value_to_iterate)*(sign_of_segment) >0):
+                num_left +=1
+            else :
+                num_right += 1
+        newton_forward_result.append((segment_x[num_left-1:], segment_y[num_left-1:]))
+        newton_backward_result.append((segment_x[:num_left+1], segment_y[:num_left+1]))
+    return newton_forward_result,newton_backward_result
+
+def findReverseLangrange(dataX, dataY, value)
+# ____________________________TEST_________________________________
+dataX = [1., 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2. ]
+dataY = [1.00000, 0.97350, 0.95135, 0.93304, 0.91817, 0.90640, 0.89747, 0.89115, 0.88726, 0.88565, 0.88623, 0.88887, 0.89352, 0.90012, 0.90864, 0.91906, 0.93138, 0.94561, 0.96177, 0.97988, 1.00000]
+(x,y) = findNewtonFixedPointSegments(dataX,dataY, 0.91106)
+for x1 in x:
+    print(x1)
+for y1 in y:
+    print(y1)

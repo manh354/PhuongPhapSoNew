@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from dataInput.dataInput import readVertical
-from dataProcess.dataProcess import findSegmentContainsRoot,getLamdifiedFunction
+from dataProcess.dataProcess import findSegmentContainsRoot
+from dataProcess.dataAdvanceProcess import getLamdifiedFunction
 from intergration.simpson import simpsonQuadraticGrid
 # result, num_step = simpsonQuadraticGrid(equation, variable,a,b, 10, 5e-8)
 # print("Kết quả cuối cùng thu được: {0} \tsau số bước: {1}".format(result,num_step))
@@ -50,13 +51,17 @@ from differentialEquation.adamsMoulton import mainAdamsMoulton
 # Test = False
 
 dataX, dataY = readVertical()
+x = sp.Symbol("x")
+simpsonQuadraticGrid(fitting)
 
-adjustable_parameters = sp.symbols("a c")
-independent_variable = sp.Symbol("x")
-fitting_function = str("a*x**2  + c")
-fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
-
-param_start = [1,1]
-
-i, param = lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable,fitting_function,param_start)
-drawLeastSquare(dataX,dataY,fitting_function,param)
+#x,y,a,b = findSegmentContainsRoot(dataX, dataY, 0.90912)
+#
+#adjustable_parameters = sp.symbols("a c")
+#independent_variable = sp.Symbol("x")
+#fitting_function = str("a*x**2  + c")
+#
+#param_start = [1,1]
+#
+#i, param = lqLeastSquare(dataX,dataY,adjustable_parameters,independent_variable,fitting_function,param_start)
+#fitting_function = getLamdifiedFunction(fitting_function, adjustable_parameters,independent_variable)
+#drawLeastSquare(dataX,dataY,fitting_function,param)
