@@ -168,6 +168,10 @@ def fixedpointIterationForAM(lamdified_equation_system,number_of_points_used : i
         i += 1
     return vars_iterate_new
 
+def getAdamsMoultonMethod(number_of_points):
+    return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsMoulton(number_of_points,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
+
+
 def AMCorrector(lamdified_equation_system,number_of_points_used : int, lookup_table, sum_of_equation_system_value_from_i1_to_iN ,vars_start : list, t_start, h : float ,EPS, ITR_MAX):
     vars_iterate = vars_start.copy()
     t_iterate = t_start + h

@@ -36,7 +36,7 @@ II. Hướng dẫn cụ thể
             - "wrapperBesselNorm" : Bessel đổi biến t
             - "wrapperBesselSkewed" : Bessel đổi biến u
         - Các hàm wrapper không trả về kết quả.
-        - INPUT: của hàm wrapper : dataX, dataY, giá trị cần nội suy
+        - INPUT: dataX, dataY, giá trị cần nội suy
             - Wrapper yêu cầu nhập dữ liệu mốc trung tâm/ trái / phải tuỳ thuật 
             toán.
             - Wrapper yêu cầu nhập số mốc kết nạp về hai bên / trái / phải
@@ -242,4 +242,71 @@ II. Hướng dẫn cụ thể
 
 
     7. Sử dụng phương trình vi phân
-        - Dùng hàm trong "mainDifferentialEquation.py"
+        - Sử dụng các hàm "de" + tên phương pháp để tìm nghiệm số của phương trình 
+        vi phân
+        - Các hàm phương trình vi phân kể đến:
+            * CÁC CÔNG THỨC MỘT BƯỚC
+            - "deEulerForward" : Euler hiện
+            - "deEulerBackward" : Euler ẩn
+            - "deTrapezoid" : Thang ẩn
+            - "deRungeKutta2_Heun" : RK2 Heun
+            - "deRungaKutta3_Heun" : RK3 Heun
+            - "deRungaKutta3_Kutta" : RK3 Kutta
+            - "deRungeKutta4_Classic" : RK4
+            * CÁC CÔNG THỨC NHIỀU BƯỚC
+            - "deAdamsBashfort" : AB
+            - "deAdamsMoulton" : AM
+        - Các hàm này đều trả về kết quả là giá trị t và giá trị biến số.
+        - INPUT:
+            - symbolic_t : kí hiệu biến thời gian
+            - symbolic_vars : các kí hiệu của biến cần giải
+            - deriv_equations : hệ phương trình vi phân dạng string
+            - vars_start : điểm bắt đầu của biến cần giải
+            - t_start, t_end : giá trị bắt đầu và kết thúc của thời gian.
+            - h : độ dài bước nhảy thời gian
+        - OUTPUT:
+            - list_result_t: danh sách giá trị biến thời gian
+            - list_result_vars: danh sách giá trị là nghiệm cần tìm.
+        - CODE: nhập input để giải hệ phương trình vi phân trong đề 2021-1 như sau:
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            symbolic_t = sp.symbols('t') 
+            symbolic_vars = sp.symbols("x y")
+            deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)","-0.35*y+0.35*x**2*y/(1+15*x**2)"]
+            vars_start = [6,4]
+            t_start = 0
+            t_end = 10
+            h = 0.1
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+        a. Sử dụng các phương pháp 1 bước giải PTVP
+            - Sử dụng hàm "deSolveAndDraw2D" nhập các hàm sử dụng phương pháp một
+            bước.
+            - INPUT:
+                - func: phương pháp cần sử dụng
+                - deriv_equations: hệ PTVP dạng string
+                - symbolic_vars: kí hiệu biến của nghiệm
+                - symbolic_t: kí hiệu biến thời gian
+                - vars_start : điểm bắt đầu của biến cần giải
+                - t_start, t_end : giá trị bắt đầu và kết thúc của thời gian.
+                - h : độ dài bước nhảy thời gian
+            - OUTPUT:
+                - list_result_t: danh sách giá trị biến thời gian
+                - list_result_vars: danh sách giá trị là nghiệm cần tìm.
+            - CODE: thực hiện thuật toán Euler ẩn, in ra 3 số đầu, 3 số cuối:
+        ╔═══════════════════════════════════════════════════════════════════════════╗
+            i_to_print = [1,2,3,-1,-2,-3]
+            list_result_t, list_result_vars = deSolveAndDraw2D(deEulerBackward,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
+            for i in i_to_print:
+                print("t {0}: ".format(i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
+            plt.show()
+        ╚═══════════════════════════════════════════════════════════════════════════╝
+
+        b. Sử dụng các phương pháp nhiều bước giải PTVP 
+        
+    ┍━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┑
+    │ ! Hàm gọi cho phương pháp nhiều bước khác với hàm cho phương pháp 1 bước   │
+    │ ! Đối với phương pháp nhiều bước, chúng có tính không ổn định quá 6 điểm   │
+    │ ! Khi gọi hàm phải ghi số điểm sử dụng                                     │
+    ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙  
+    
+

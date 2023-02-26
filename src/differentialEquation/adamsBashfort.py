@@ -123,40 +123,40 @@ def mainRungeKutta4_Classic(symbolic_function_system : list, symbolic_vars : lis
 
 
 
-def makeABWorks(number_of_points_used, symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
+def makeABWorks(number_of_points, symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
     if(multiple_points_t_start is float or int):
         return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,multiple_points_t_start + (3.1)*h,h)
-    if(number_of_points_used < len(multiple_points_t_start)):
+    if(number_of_points < len(multiple_points_t_start)):
         position = len (multiple_points_t_start) -1
-        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start[position],multiple_points_t_start[position],multiple_points_t_start[position]+(number_of_points_used - position + 0.1)*h, h)
+        return mainRungeKutta4_Classic(symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start[position],multiple_points_t_start[position],multiple_points_t_start[position]+(number_of_points - position + 0.1)*h, h)
     return multiple_points_t_start, multiple_points_vars_start
 
 
-def deAdamsBashfort(number_of_points_used : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
-    lookup_table = createLookupTableForABMethod(number_of_points_used)
-    multiple_points_t_start, multiple_points_vars_start = makeABWorks(number_of_points_used, symbolic_function_system , symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h)
+def deAdamsBashfort(number_of_points : int,symbolic_function_system : list, symbolic_vars : list[sp.Symbol], symbolic_t : sp.Symbol , multiple_points_vars_start: list[list[float]], multiple_points_t_start: list[float], t_end: float,h : float):
+    lookup_table = createLookupTableForABMethod(number_of_points)
+    multiple_points_t_start, multiple_points_vars_start = makeABWorks(number_of_points, symbolic_function_system , symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h)
     lamdified_equation_system = [sp.lambdify([[*symbolic_vars],symbolic_t],func) for func in symbolic_function_system]
     list_result_t = multiple_points_t_start.copy()
     list_result_vars = multiple_points_vars_start.copy()
     t_iterate = multiple_points_t_start[len(multiple_points_t_start)-1]
     while t_iterate < t_end:
-        vars_iterate = adamsBashfortPredictor(number_of_points_used,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
+        vars_iterate = adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
         t_iterate = t_iterate + h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
-def getAdamsBashfortMethod(number_of_points_used):
-    return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsBashfort(number_of_points_used,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
+def getAdamsBashfortMethod(number_of_points):
+    return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsBashfort(number_of_points,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
 
-def adamsBashfortPredictor(number_of_points_used,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h):
+def adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h):
     position = len(list_result_vars) - 1
     vars_iterate = list_result_vars[position]
     t_iterate = list_result_t[position]
     equation_system_values = np.zeros(len(vars_iterate))
-    for i in range(0, number_of_points_used):
+    for i in range(0, number_of_points):
         equation_system_values_at_i_points_back = [equation((list_result_vars[position - i]),list_result_t[position -i]) for equation in lamdified_equation_system]
-        equation_system_values_at_i_points_back = np.multiply(equation_system_values_at_i_points_back, lookup_table[number_of_points_used - 1][i])
+        equation_system_values_at_i_points_back = np.multiply(equation_system_values_at_i_points_back, lookup_table[number_of_points - 1][i])
         equation_system_values = np.add(equation_system_values_at_i_points_back,equation_system_values)
     vars_iterate = np.add(vars_iterate, np.multiply(h,equation_system_values)) # var = var + h * d(var)/dt 
     return vars_iterate
