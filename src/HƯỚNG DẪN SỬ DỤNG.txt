@@ -309,14 +309,24 @@ II. Hướng dẫn cụ thể
     │ ! Khi gọi hàm phải ghi số điểm sử dụng                                     │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙  
 
-            - Sử dụng hàm "deSolveAdamsBashfortAndDraw2D" giải PTVP:
+            - Sử dụng hàm "deSolveABAndDraw2D" giải PTVP:
             - INPUT:
                 - number_of_points: số điểm nhập vào sử dụng cho PTVP
-                - deriv_equations: hệ phương trình vi phân
-                - symbolic_vars: 
-                - symbolic_t:
-                - vars_start:
-                - t_start:
-                - t_end:
-                - h:
+                - deriv_equations: hệ PTVP dạng string
+                - symbolic_vars: kí hiệu biến của nghiệm
+                - symbolic_t: kí hiệu biến thời gian
+                - vars_start : điểm bắt đầu của biến cần giải
+                - t_start, t_end : giá trị bắt đầu và kết thúc của thời gian.
+                - h : độ dài bước nhảy thời gian
+            - OUTPUT:
+                - Hàm vẽ ra ngoài màn hình những kết quả sau:
+                    * Đồ thị giá trị phụ thuộc biến x,y
+                    * Đồ thị giá trị predictor (màu cam) và corrector (màu xanh)
+                    trả về cho từng biến.
+                    * Đồ thị giá trị sai số giữa predictor và corrector (màu đỏ)
+                - list_result_t: danh sách giá trị biến thời gian
+                - list_result_vars: danh sách giá trị là nghiệm cần tìm. 
+            - CODE: thực hiện thuật toán AB 4 bước, in ra 6 số ở các vị trí 1,2,3
+            98,99,100:
+
 

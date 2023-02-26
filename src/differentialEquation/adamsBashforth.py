@@ -140,16 +140,16 @@ def deAdamsBashfort(number_of_points : int,symbolic_function_system : list, symb
     list_result_vars = multiple_points_vars_start.copy()
     t_iterate = multiple_points_t_start[len(multiple_points_t_start)-1]
     while t_iterate < t_end:
-        vars_iterate = adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
+        vars_iterate = ABPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
         t_iterate = t_iterate + h
         list_result_t.append(t_iterate)
         list_result_vars.append(vars_iterate)
     return list_result_t,list_result_vars
 
-def getAdamsBashfortMethod(number_of_points):
+def getAdamsBashforthMethod(number_of_points):
     return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsBashfort(number_of_points,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
 
-def adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h):
+def ABPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h):
     position = len(list_result_vars) - 1
     vars_iterate = list_result_vars[position]
     t_iterate = list_result_t[position]
@@ -163,6 +163,6 @@ def adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_tab
 
 def getAdamsBashfortPredictor(number_of_points):
     lookup_table = createLookupTableForABMethod(number_of_points)
-    return lambda lamdified_equation_system,list_result_vars,list_result_t,h : adamsBashfortPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
+    return lambda lamdified_equation_system,list_result_vars,list_result_t,h : ABPredictor(number_of_points,lamdified_equation_system,lookup_table,list_result_vars,list_result_t,h)
     
     

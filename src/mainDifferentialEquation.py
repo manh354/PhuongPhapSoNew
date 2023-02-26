@@ -2,7 +2,7 @@ from differentialEquation.eulerForward import deEulerForward
 from differentialEquation.eulerBackward import deEulerBackward
 from differentialEquation.trapezoid import deTrapezoid
 from differentialEquation.rungeKutta import deRungeKutta4_Classic, deRungaKutta3_Heun, deRungaKutta3_Kutta, deRungeKutta2_Heun
-from differentialEquation.adamsBashfort import deAdamsBashfort
+from differentialEquation.adamsBashforth import deAdamsBashfort
 from differentialEquation.adamsMoulton import deAdamsMoulton
 from differentialEquation.adamsPredictorCorrector import mainAdamsPredictorCorrector
 import sympy as sp
