@@ -47,19 +47,38 @@ from differentialEquation.solutionDrawer import deSolveAndDraw2D, deSolveAdamsBa
 
 dataX, dataY = readVertical()
 
-symbolic_t = sp.symbols('t') 
-symbolic_vars = sp.symbols("x y")
-deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)","-0.35*y+0.35*x**2*y/(1+15*x**2)"]
-vars_start = [6,4]
+symbolic_t = sp.symbols('x') 
+symbolic_vars = sp.symbols("y")
+if(isinstance(symbolic_vars, sp.Symbol)):
+    symbolic_vars = [symbolic_vars]
+deriv_equations = ["1.5*(1-x/20)*x - 0.5*x**2*y/(1+15*x**2)"]
+vars_start = [6]
 t_start = 0
 t_end = 10
 h = 0.1
 
-i_to_print = [1,2,3,-1,-2,-3]
-list_result_t, list_result_vars = deSolveAdamsBashfortAndDraw2D(4,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
-for i in i_to_print:
-    print("t {0}: ".format(i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
-plt.show()
+equation = "1/(1+x**2)"
+var = sp.Symbol('x')
+start = 0
+end = 3
+num_step =2
+eps = 0.0000001
+
+results = simpsonQuadraticGrid(equation,var, start, end, num_step,eps)
+for i,result in enumerate(results):
+    print("Số lượng khoảng grid {0}: {1}, giá trị: {2}".format(i,result[1], result[0]))
+diffs = np.diff(results)
+errors = np.multiply(1/15,np.abs(diffs))
+for i, diffs in enumerate(diffs):
+    print("Sai số grid {0}, giá trị {1}".format())
+
+''' PP giải nhiều bước PTVP'''
+
+#i_to_print = [1,2,3,-1,-2,-3]
+#list_result_t, list_result_vars = deSolveAdamsBashfortAndDraw2D(4,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
+#for i in i_to_print:
+#    print("t {0}: ".format(i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
+#plt.show()
 
 ''' PP giải 1 bước PTVP'''
 #i_to_print = [1,2,3,-1,-2,-3]
@@ -95,7 +114,7 @@ plt.show()
 #results = simpsonQuadraticGrid(equation,var, start, end, num_step,eps)
 #for i,result in enumerate(results):
 #    print("Số lượng khoảng grid {0}: {1}, giá trị: {2}".format(i,result[1], result[0]))
-
+#diff = np.diff()
 ''' SIMPSON hàm không biết trước, đánh giá sai số'''
 #resultH = simpsonQuadraticDiscrete(dataX[1]-dataX[0],dataY,len(dataX)-1)
 #dataY2H = halvesGrid(dataY)

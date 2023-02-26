@@ -308,5 +308,15 @@ II. Hướng dẫn cụ thể
     │ ! Đối với phương pháp nhiều bước, chúng có tính không ổn định quá 6 điểm   │
     │ ! Khi gọi hàm phải ghi số điểm sử dụng                                     │
     ┕━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┙  
-    
+
+            - Sử dụng hàm "deSolveAdamsBashfortAndDraw2D" giải PTVP:
+            - INPUT:
+                - number_of_points: số điểm nhập vào sử dụng cho PTVP
+                - deriv_equations: hệ phương trình vi phân
+                - symbolic_vars: 
+                - symbolic_t:
+                - vars_start:
+                - t_start:
+                - t_end:
+                - h:
 
