@@ -172,17 +172,24 @@ def getAdamsMoultonMethod(number_of_points):
     return lambda symbolic_function_system, symbolic_vars, symbolic_t , multiple_points_vars_start, multiple_points_t_start, t_end,h : deAdamsMoulton(number_of_points,symbolic_function_system,symbolic_vars,symbolic_t,multiple_points_vars_start,multiple_points_t_start,t_end,h)
 
 
-def AMCorrector(lamdified_equation_system,number_of_points_used : int, lookup_table, sum_of_equation_system_value_from_i1_to_iN ,vars_start : list, t_start, h : float ,EPS, ITR_MAX):
-    vars_iterate = vars_start.copy()
-    t_iterate = t_start + h
+def AMCorrector(lamdified_equation_system,number_of_points_used : int, lookup_table, list_result_vars,list_result_t ,vars_start : list, t_start, h : float ,epsilon, terminate_threshold):
+    position = len(list_result_vars) - 1
+    vars_iterate = list_result_vars[position]
+    t_iterate = list_result_t[position]
+    sum_of_equation_system_values = np.zeros(len(vars_iterate))
+    for i in range(0, number_of_points_used - 1):
+        equation_system_values_at_i_points_back = [equation((list_result_vars[position - i]),list_result_t[position -i]) for equation in lamdified_equation_system]
+        equation_system_values_at_i_points_back = np.multiply(equation_system_values_at_i_points_back, lookup_table[number_of_points_used - 1][i+1])
+        sum_of_equation_system_values = np.add(equation_system_values_at_i_points_back,sum_of_equation_system_values)
+    
     coef = lookup_table[number_of_points_used-1][0]
-    equation_system_values_at_iterate = [equation((vars_iterate),t_iterate) for equation in lamdified_equation_system]
-    vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))
+    equation_system_values_at_iterate = [equation((vars_iterate),t_iterate + h) for equation in lamdified_equation_system]
+    vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_values)))
     i = 1
-    while (np.sum(np.abs(np.subtract(vars_iterate_new, vars_iterate))) >= EPS) and (i < ITR_MAX):
+    while (np.sum(np.abs(np.subtract(vars_iterate_new, vars_iterate))) >= epsilon) and (i < terminate_threshold):
         vars_iterate = vars_iterate_new.copy()
-        equation_system_values_at_iterate = [equation((vars_iterate),t_iterate) for equation in lamdified_equation_system]
-        vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_value_from_i1_to_iN)))
+        equation_system_values_at_iterate = [equation((vars_iterate),t_iterate + h) for equation in lamdified_equation_system]
+        vars_iterate_new = np.add(vars_start,np.multiply(h, np.add(np.multiply(coef,equation_system_values_at_iterate),sum_of_equation_system_values)))
         i += 1
     return vars_iterate_new
 
