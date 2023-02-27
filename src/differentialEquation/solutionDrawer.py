@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from .customPredictorCorrector import getCustomPredictorCorrector
-from .adamsBashforth import getAdamsBashforthMethod
+from .adamsBashforth import getAdamsBashforthMethod, getAdamsBashfortPredictor
 from .adamsMoulton import getAdamsMoultonMethod
 import numpy as np
 
@@ -39,6 +39,12 @@ def deSolveAMAndDraw2D(number_of_points,deriv_equations,symbolic_vars,symbolic_t
         ax[i].plot(list_result_t,array_of_result[i-1])
     return list_result_t, list_result_var
 
+def deSolveAB_AM_PC_AndDraw2D(predictor, p_points, corrector, c_points, deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h,EPS, ITR_MAX):
+    if(p_points > 0):
+        predictor = get(p_points)
+    if(c_points > 0):
+        corrector = getAdamsMoultonMethod(c_points)
+    
 
 def deSolvePCAndDraw2D(predictor, corrector,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h,EPS, ITR_MAX):
     func = getCustomPredictorCorrector(predictor,corrector)

@@ -79,13 +79,13 @@ h = 0.1
 
 if(isinstance(symbolic_vars, sp.Symbol)):
     symbolic_vars = [symbolic_vars]
-''' PP giải nhiều bước PTVP : AB'''
+''' PP giải nhiều bước PTVP : AB, AM'''
 
-#i_to_print = [1,2,3,-3,-2,-1]
-#list_result_t, list_result_vars = deSolveABAndDraw2D(4,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
-#for i in i_to_print:
-#    print("{0} {1}: ".format(symbolic_t,i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
-#plt.show()
+i_to_print = [1,2,3,-3,-2,-1]
+list_result_t, list_result_vars = deSolveAMAndDraw2D(4,deriv_equations,symbolic_vars,symbolic_t,vars_start,t_start,t_end,h)
+for i in i_to_print:
+    print("{0} {1}: ".format(symbolic_t,i) + " ; ".join("{} = {}".format(*s) for s in zip(symbolic_vars,list_result_vars[i])))
+plt.show()
 
 ''' PP giải 1 bước PTVP'''
 #i_to_print = [1,2,3,98,99,100]
